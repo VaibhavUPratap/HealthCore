@@ -1,6 +1,6 @@
 {
   "name": "Smart Health Surveillance",
-  "short_name": "HealthApp",
+  "short_name": "HealthCore",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
