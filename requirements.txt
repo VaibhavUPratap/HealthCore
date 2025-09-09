@@ -1,0 +1,15 @@
+Flask
+Flask-PyMongo
+pymongo
+scikit-learn
+pandas
+numpy
+joblib
+gunicorn
+requests
+flask-cors
+matplotlib
+seaborn
+nltk
+firebase-admin
+twilio
