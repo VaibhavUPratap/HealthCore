@@ -45,6 +45,14 @@ body {
   font-weight: 500;
 }
 
+.nav-links a.active { color: #2c7; }
+
+a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible {
+  outline: 2px solid #2c7;
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
 .nav-links a.active {
   color: green;
 }
@@ -66,7 +74,7 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: 60px 50px;
-  background: linear-gradient(to right, #fff 60%, #e6ffe6 40%);
+  background: #f6fbf6;
 }
 
 .hero-text {
@@ -106,4 +114,37 @@ body {
 .hero-image img {
   width: 380px;
   max-width: 100%;
+}
+
+.container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+.page-title { margin: 10px 0 20px; }
+.grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+.grid .full { grid-column: span 2; }
+label { display: grid; gap: 6px; font-size: 0.95rem; }
+input, textarea, select { border: 1px solid #ccc; border-radius: 8px; padding: 10px; }
+.actions { margin-top: 14px; display: flex; gap: 10px; }
+.notice { margin-top: 12px; background: #f0fff4; border: 1px solid #b7f0c2; padding: 10px; border-radius: 8px; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.list { display: grid; gap: 8px; margin-top: 10px; }
+.card { padding: 10px; border: 1px solid #eee; border-radius: 8px; background: #fff; }
+.badge { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 12px; margin-left: 6px; }
+.badge.low { background: #e6f7ee; color: #1b5e20; }
+.badge.medium { background: #fff7e6; color: #8a6d1a; }
+.badge.high { background: #fdecea; color: #b71c1c; }
+.bullets { margin-top: 8px; padding-left: 18px; }
+.map { height: 360px; border-radius: 8px; overflow: hidden; }
+.btn { background: #2c7; color: #fff; padding: 10px 16px; border-radius: 8px; text-decoration: none; display: inline-block; }
+.btn:hover { background: #279a5c; }
+.btn-secondary { background: #eef3f0; color: #1b4332; }
+.btn-secondary:hover { background: #e3ebe7; }
+.footer { margin-top: 30px; border-top: 1px solid #eee; padding: 16px 0; color: #666; }
+.small { font-size: 0.9rem; }
+.hero-actions { margin-top: 10px; display: flex; gap: 10px; }
+
+@media (max-width: 800px) {
+  .hero { flex-direction: column; padding: 30px 20px; }
+  .hero-text { max-width: 100%; }
+  .grid { grid-template-columns: 1fr; }
+  .grid .full { grid-column: span 1; }
+  .grid-2 { grid-template-columns: 1fr; }
 }

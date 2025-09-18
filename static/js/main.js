@@ -1,7 +1,12 @@
-document.getElementById("appointmentBtn").addEventListener("click", () => {
-  alert("Thank you! Appointment booking feature coming soon 🚀");
+const appt = document.getElementById("appointmentBtn");
+if (appt) appt.addEventListener("click", () => alert("Thank you! Appointment feature coming soon 🚀"));
+
+// Activate current nav link
+document.querySelectorAll('.nav-links a').forEach(a => {
+  if (a.getAttribute('href') === location.pathname) a.classList.add('active');
 });
 
-document.getElementById("logo-text").addEventListener("click", () => {
-  alert("Redirected to homepage!");
-});
+// Register basic service worker
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/static/js/sw.js').catch(()=>{});
+}

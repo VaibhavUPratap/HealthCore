@@ -1,1 +1,109 @@
-<!-- alerts.html placeholder -->
+{% extends 'base.html' %}
+{% block title %}Dashboard - HealthCore{% endblock %}
+{% block content %}
+  <h1 class="page-title">Health Dashboard</h1>
+  <div id="map" class="map"></div>
+  <canvas id="trendChart" height="180" style="margin-top:12px;"></canvas>
+  <div id="alerts" class="list" style="margin-top:12px;"></div>
+{% endblock %}
+
+{% block head %}
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+{% endblock %}
+
+{% block scripts %}
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    const map = L.map('map').setView([20.59, 78.96], 5);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' }).addTo(map);
+    const layer = L.layerGroup().addTo(map);
+
+    function riskOf(r) {
+      const cases = r.cases || 0;
+      const turbidity = r.turbidity || 0;
+      if (cases > 10 || turbidity > 20) return 'High';
+      if (cases > 5 || turbidity > 10) return 'Medium';
+      return 'Low';
+    }
+
+    function colorFor(risk) {
+      if (risk === 'High') return '#e53935';
+      if (risk === 'Medium') return '#fb8c00';
+      return '#2e7d32';
+    }
+
+    // Legend
+    const legend = L.control({position: 'bottomright'});
+    legend.onAdd = function() {
+      const div = L.DomUtil.create('div', 'card');
+      div.style.padding = '6px 8px';
+      div.innerHTML = '<strong>Risk</strong><br>'+
+        '<span style="display:inline-block;width:10px;height:10px;background:#2e7d32;border-radius:50%;margin-right:6px;"></span>Low<br>'+
+        '<span style="display:inline-block;width:10px;height:10px;background:#fb8c00;border-radius:50%;margin-right:6px;"></span>Medium<br>'+
+        '<span style="display:inline-block;width:10px;height:10px;background:#e53935;border-radius:50%;margin-right:6px;"></span>High';
+      return div;
+    };
+    legend.addTo(map);
+
+    async function load() {
+      const alertsBox = document.getElementById('alerts');
+      alertsBox.innerHTML = '<div class="card">Loading...</div>';
+      try {
+        const [repRes, alertRes] = await Promise.all([
+          fetch('/api/reports?limit=100'), fetch('/api/alerts?limit=100')
+        ]);
+        if (!repRes.ok || !alertRes.ok) throw new Error('API error');
+        const reps = await repRes.json();
+        const alerts = await alertRes.json();
+
+      layer.clearLayers();
+      const markers = [];
+      (reps.items || []).forEach(r => {
+        if (r.lat && r.lng) {
+          const risk = riskOf(r);
+          const color = colorFor(risk);
+          markers.push(L.circleMarker([r.lat, r.lng], { radius: 8, color, fillColor: color, fillOpacity: 0.9, weight: 2 })
+            .bindPopup(`${r.location_name || 'Unknown'}<br>Risk: ${risk}<br>Cases: ${r.cases ?? '-'}<br>Turbidity: ${r.turbidity ?? '-'}`));
+        }
+      });
+      markers.forEach(m => m.addTo(layer));
+
+      const byDay = new Map();
+      (reps.items || []).forEach(r => {
+        const d = (r.timestamp || '').slice(0,10);
+        byDay.set(d, (byDay.get(d) || 0) + (r.cases || 0));
+      });
+      const labels = Array.from(byDay.keys()).sort();
+      const values = labels.map(k => byDay.get(k));
+      new Chart(document.getElementById('trendChart').getContext('2d'), { type:'line', data:{ labels, datasets:[{ label:'Cases', data:values, borderColor:'#2c7'}]}});
+
+      const list = alertsBox;
+      list.innerHTML = '';
+      const arr = alerts.alerts || [];
+      if (arr.length === 0) {
+        const empty = document.createElement('div');
+        empty.className = 'card';
+        empty.textContent = 'No alerts yet.';
+        list.appendChild(empty);
+      }
+      arr.forEach(a => {
+        const div = document.createElement('div');
+        div.className = 'card';
+        const risk = (a.risk || 'Low').toLowerCase();
+        div.innerHTML = `<strong>${a.location_name}</strong> <span class="badge ${risk}">${a.risk}</span><br>${a.message} — ${a.details}`;
+        list.appendChild(div);
+      });
+      } catch (err) {
+        const alertsBox = document.getElementById('alerts');
+        alertsBox.innerHTML = '';
+        const error = document.createElement('div');
+        error.className = 'card';
+        error.textContent = 'Failed to load dashboard data. Ensure the server and MongoDB are running.';
+        alertsBox.appendChild(error);
+        console.error(err);
+      }
+    }
+    load();
+  </script>
+{% endblock %}

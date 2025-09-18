@@ -1,1 +1,44 @@
-<!-- report.html placeholder -->
+{% extends 'base.html' %}
+{% block title %}Report - HealthCore{% endblock %}
+{% block content %}
+  <h1 class="page-title">Community Health & Water Report</h1>
+  <form id="reportForm" class="grid">
+    <label>Reporter Name<input name="reporter" required></label>
+    <label>Location Name<input name="location_name" required></label>
+    <label>Latitude<input name="lat" type="number" step="any"></label>
+    <label>Longitude<input name="lng" type="number" step="any"></label>
+    <label class="full">Symptoms<textarea name="symptoms" rows="3"></textarea></label>
+    <label>Cases<input name="cases" type="number" min="0" step="1" required></label>
+    <label>Turbidity (NTU)<input name="turbidity" type="number" min="0" step="0.1"></label>
+    <label>pH<input name="ph" type="number" min="0" step="0.1"></label>
+    <label>Chlorine (mg/L)<input name="chlorine" type="number" min="0" step="0.1"></label>
+    <div class="actions full"><button class="btn" type="submit">Submit</button></div>
+  </form>
+  <div id="result" class="notice" style="display:none;"></div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Auto-fill location on load (silent fallback if denied)
+if (navigator.geolocation) {
+  navigator.geolocation.getCurrentPosition((pos) => {
+    const latEl = document.querySelector('[name=lat]');
+    const lngEl = document.querySelector('[name=lng]');
+    if (latEl) latEl.value = pos.coords.latitude.toFixed(6);
+    if (lngEl) lngEl.value = pos.coords.longitude.toFixed(6);
+  }, () => {/* ignore if blocked/failed */}, { enableHighAccuracy: true, timeout: 5000, maximumAge: 60000 });
+}
+
+document.getElementById("reportForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const form = e.currentTarget;
+  const data = Object.fromEntries(new FormData(form).entries());
+  const res = await fetch("/api/report", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) });
+  const json = await res.json();
+  const el = document.getElementById("result");
+  el.style.display = "block";
+  el.textContent = res.ok ? `Submitted. Risk: ${json.risk}` : `Error submitting`;
+  form.reset();
+});
+</script>
+{% endblock %}
