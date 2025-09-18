@@ -1,0 +1,175 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+/* Reset and font */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Montserrat", sans-serif;
+}
+
+body {
+  background: #f5f9ff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* Container */
+.container {
+  width: 100%;
+  max-width: 400px; /* default for mobile */
+  padding: 20px;
+}
+
+/* Card */
+.welcome-box {
+  background: #fff;
+  padding: 30px 25px;
+  border-radius: 15px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: 0.3s;
+}
+
+.welcome-box h1 {
+  background-color: #1976D2;
+  color: white;
+  font-size: 1.6rem;
+  margin-bottom: 10px;
+  padding:1rem;
+}
+
+.welcome-box p {
+  color: #555;
+  font-size: 0.95rem;
+  margin-bottom: 20px;
+  padding-bottom:1rem;
+}
+
+/* Role Selection */
+.role-toggle {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+
+.role-toggle button {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  background: #e0e0e0;
+  color: #333;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.role-toggle button.active {
+  background: #1976D2;
+  color: #fff;
+  font-weight: bold;
+}
+
+/* Login/Signup toggle */
+.form-toggle {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.form-toggle button {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  background: #e0e0e0;
+  color: #333;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.form-toggle button.active {
+  background: #1976D2;
+  color: #fff;
+  font-weight: bold;
+}
+
+/* Forms */
+.form {
+  display: none;
+  flex-direction: column;
+}
+
+.form.active {
+  display: flex;
+}
+
+.form input {
+  padding: 12px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.form button {
+  padding: 12px;
+  background: #1976D2;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.form button:hover {
+  background: #125a9c;
+}
+
+/* --- Responsive Breakpoints --- */
+
+/* Tablet/Desktop */
+@media (min-width: 769px) {
+  .container {
+    max-width: 600px; /* wider container */
+  }
+
+  .welcome-box {
+    text-align: center; /* better desktop readability */
+    padding: 40px;
+    /* display: grid;
+    grid-template-columns: 1fr 1fr; /* two-column layout */ 
+    align-items: center;
+    gap: 40px;
+    min-height:80vh;
+  }
+
+  .welcome-box h1 {
+    font-size: 2rem;
+  }
+
+  .welcome-box p {
+    font-size: 1.1rem;
+  }
+
+  .form, .role-toggle, .form-toggle {
+    width: 100%;
+  }
+}
+
+/* Small screens (mobile) */
+@media (max-width: 768px) {
+  .welcome-box {
+    padding: 20px 15px;
+    text-align: center;
+    display: block; /* keep single-column for phones */
+    min-height:80vh;
+  }
+
+  .welcome-box h1 {
+    font-size: 2rem;
+  }
+}
