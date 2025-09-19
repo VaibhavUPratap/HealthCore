@@ -1,10 +1,133 @@
 {% extends 'base.html' %}
 {% block title %}Dashboard - HealthCore{% endblock %}
 {% block content %}
-  <h1 class="page-title">Health Dashboard</h1>
-  <div id="map" class="map"></div>
-  <canvas id="trendChart" height="180" style="margin-top:12px;"></canvas>
-  <div id="alerts" class="list" style="margin-top:12px;"></div>
+  <div class="min-h-screen bg-muted/30">
+    <!-- Header -->
+    <div class="bg-card shadow-sm border-b">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between animate-fade-in">
+          <div>
+            <div class="inline-flex items-center rounded-full border px-3 py-1 text-sm bg-background/80 backdrop-blur-sm mb-4">
+              <div class="h-2 w-2 rounded-full bg-primary mr-2 animate-pulse-slow"></div>
+              Real-time Monitoring
+            </div>
+            <h1 class="text-4xl font-bold text-foreground mb-2">Health Dashboard</h1>
+            <p class="text-lg text-muted-foreground">Monitor water quality and disease outbreaks with comprehensive analytics</p>
+          </div>
+          <div class="mt-6 sm:mt-0 flex flex-col sm:flex-row gap-4">
+            <select id="riskFilter" class="flex h-10 w-full sm:w-[200px] rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 hover:border-primary/50 transition-all duration-200">
+              <option value="all">All Risk Levels</option>
+              <option value="High">High Risk</option>
+              <option value="Medium">Medium Risk</option>
+              <option value="Low">Low Risk</option>
+            </select>
+            <button id="refreshBtn" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 hover:scale-105 transform shadow-lg hover:shadow-xl">
+              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+              </svg>
+              Refresh
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div id="statsCards" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+        <!-- Stats will be populated by JavaScript -->
+      </div>
+
+      <!-- Main Content Grid -->
+      <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+        <!-- Map Card -->
+        <div class="xl:col-span-2">
+          <div class="bg-card rounded-2xl shadow-xl border overflow-hidden animate-slide-up">
+            <div class="px-6 py-4 border-b bg-gradient-to-r from-primary/5 to-accent/5">
+              <div class="flex items-center space-x-2">
+                <div class="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="text-lg font-semibold text-foreground">Outbreak Locations</h3>
+                  <p class="text-sm text-muted-foreground">Real-time monitoring of reported cases</p>
+                </div>
+              </div>
+            </div>
+            <div id="map" class="h-96"></div>
+          </div>
+        </div>
+
+        <!-- Alerts Card -->
+        <div class="xl:col-span-1">
+          <div class="bg-card rounded-2xl shadow-xl border h-full animate-slide-up" style="animation-delay: 0.1s">
+            <div class="px-6 py-4 border-b bg-gradient-to-r from-accent/5 to-primary/5">
+              <div class="flex items-center space-x-2">
+                <div class="h-8 w-8 rounded-lg bg-accent/10 flex items-center justify-center">
+                  <svg class="w-4 h-4 text-accent-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-5 5v-5zM4.828 7l5.586 5.586a2 2 0 002.828 0L18.828 7H4.828z"></path>
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="text-lg font-semibold text-foreground">Active Alerts</h3>
+                  <p class="text-sm text-muted-foreground">Recent high-risk reports</p>
+                </div>
+              </div>
+            </div>
+            <div id="alerts" class="p-6 overflow-y-auto max-h-96">
+              <div class="text-center text-muted-foreground">Loading...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts Row -->
+      <div class="mt-12 grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Cases Trend Chart -->
+        <div class="bg-card rounded-2xl shadow-xl border animate-slide-up" style="animation-delay: 0.2s">
+          <div class="px-6 py-4 border-b bg-gradient-to-r from-green-500/5 to-blue-500/5">
+            <div class="flex items-center space-x-2">
+              <div class="h-8 w-8 rounded-lg bg-green-500/10 flex items-center justify-center">
+                <svg class="w-4 h-4 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                </svg>
+              </div>
+              <div>
+                <h3 class="text-lg font-semibold text-foreground">Cases Trend</h3>
+                <p class="text-sm text-muted-foreground">Daily reported cases over time</p>
+              </div>
+            </div>
+          </div>
+          <div class="p-6">
+            <canvas id="trendChart" class="w-full h-64"></canvas>
+          </div>
+        </div>
+
+        <!-- Risk Distribution Chart -->
+        <div class="bg-card rounded-2xl shadow-xl border animate-slide-up" style="animation-delay: 0.3s">
+          <div class="px-6 py-4 border-b bg-gradient-to-r from-orange-500/5 to-red-500/5">
+            <div class="flex items-center space-x-2">
+              <div class="h-8 w-8 rounded-lg bg-orange-500/10 flex items-center justify-center">
+                <svg class="w-4 h-4 text-orange-600 dark:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+              </div>
+              <div>
+                <h3 class="text-lg font-semibold text-foreground">Risk Distribution</h3>
+                <p class="text-sm text-muted-foreground">Breakdown by risk level</p>
+              </div>
+            </div>
+          </div>
+          <div class="p-6">
+            <canvas id="riskChart" class="w-full h-64"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock %}
 
 {% block head %}
@@ -15,10 +138,12 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
+    // Initialize map
     const map = L.map('map').setView([20.59, 78.96], 5);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' }).addTo(map);
     const layer = L.layerGroup().addTo(map);
 
+    // Risk calculation
     function riskOf(r) {
       const cases = r.cases || 0;
       const turbidity = r.turbidity || 0;
@@ -28,82 +153,246 @@
     }
 
     function colorFor(risk) {
-      if (risk === 'High') return '#e53935';
-      if (risk === 'Medium') return '#fb8c00';
-      return '#2e7d32';
+      if (risk === 'High') return '#ef4444';
+      if (risk === 'Medium') return '#f59e0b';
+      return '#10b981';
     }
 
     // Legend
     const legend = L.control({position: 'bottomright'});
     legend.onAdd = function() {
-      const div = L.DomUtil.create('div', 'card');
-      div.style.padding = '6px 8px';
-      div.innerHTML = '<strong>Risk</strong><br>'+
-        '<span style="display:inline-block;width:10px;height:10px;background:#2e7d32;border-radius:50%;margin-right:6px;"></span>Low<br>'+
-        '<span style="display:inline-block;width:10px;height:10px;background:#fb8c00;border-radius:50%;margin-right:6px;"></span>Medium<br>'+
-        '<span style="display:inline-block;width:10px;height:10px;background:#e53935;border-radius:50%;margin-right:6px;"></span>High';
+      const div = L.DomUtil.create('div', 'bg-white dark:bg-gray-800 rounded-lg shadow-lg p-3 text-sm');
+      div.innerHTML = '<div class="font-semibold text-gray-900 dark:text-white mb-2">Risk Levels</div>'+
+        '<div class="flex items-center mb-1"><div class="w-3 h-3 rounded-full bg-green-500 mr-2"></div>Low</div>'+
+        '<div class="flex items-center mb-1"><div class="w-3 h-3 rounded-full bg-yellow-500 mr-2"></div>Medium</div>'+
+        '<div class="flex items-center"><div class="w-3 h-3 rounded-full bg-red-500 mr-2"></div>High</div>';
       return div;
     };
     legend.addTo(map);
 
-    async function load() {
-      const alertsBox = document.getElementById('alerts');
-      alertsBox.innerHTML = '<div class="card">Loading...</div>';
-      try {
-        const [repRes, alertRes] = await Promise.all([
-          fetch('/api/reports?limit=100'), fetch('/api/alerts?limit=100')
-        ]);
-        if (!repRes.ok || !alertRes.ok) throw new Error('API error');
-        const reps = await repRes.json();
-        const alerts = await alertRes.json();
+    // Chart instances
+    let trendChart = null;
+    let riskChart = null;
 
-      layer.clearLayers();
-      const markers = [];
-      (reps.items || []).forEach(r => {
-        if (r.lat && r.lng) {
-          const risk = riskOf(r);
-          const color = colorFor(risk);
-          markers.push(L.circleMarker([r.lat, r.lng], { radius: 8, color, fillColor: color, fillOpacity: 0.9, weight: 2 })
-            .bindPopup(`${r.location_name || 'Unknown'}<br>Risk: ${risk}<br>Cases: ${r.cases ?? '-'}<br>Turbidity: ${r.turbidity ?? '-'}`));
-        }
-      });
-      markers.forEach(m => m.addTo(layer));
+    // Create stats cards
+    function createStatsCards(data) {
+      const statsCards = document.getElementById('statsCards');
+      const totalReports = data.length;
+      const totalCases = data.reduce((sum, r) => sum + (r.cases || 0), 0);
+      const highRisk = data.filter(r => riskOf(r) === 'High').length;
+      const avgTurbidity = data.filter(r => r.turbidity).reduce((sum, r) => sum + r.turbidity, 0) / data.filter(r => r.turbidity).length || 0;
 
+      statsCards.innerHTML = `
+        <div class="group bg-card rounded-2xl shadow-lg border p-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 animate-fade-in">
+          <div class="flex items-center space-x-4">
+            <div class="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+              <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+              </svg>
+            </div>
+            <div>
+              <p class="text-sm font-medium text-muted-foreground">Total Reports</p>
+              <p class="text-3xl font-bold text-foreground">${totalReports}</p>
+            </div>
+          </div>
+        </div>
+        <div class="group bg-card rounded-2xl shadow-lg border p-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 animate-fade-in" style="animation-delay: 0.1s">
+          <div class="flex items-center space-x-4">
+            <div class="h-12 w-12 rounded-xl bg-destructive/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+              <svg class="w-6 h-6 text-destructive" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+              </svg>
+            </div>
+            <div>
+              <p class="text-sm font-medium text-muted-foreground">Total Cases</p>
+              <p class="text-3xl font-bold text-foreground">${totalCases}</p>
+            </div>
+          </div>
+        </div>
+        <div class="group bg-card rounded-2xl shadow-lg border p-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 animate-fade-in" style="animation-delay: 0.2s">
+          <div class="flex items-center space-x-4">
+            <div class="h-12 w-12 rounded-xl bg-orange-500/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+              <svg class="w-6 h-6 text-orange-600 dark:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+              </svg>
+            </div>
+            <div>
+              <p class="text-sm font-medium text-muted-foreground">High Risk</p>
+              <p class="text-3xl font-bold text-foreground">${highRisk}</p>
+            </div>
+          </div>
+        </div>
+        <div class="group bg-card rounded-2xl shadow-lg border p-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 animate-fade-in" style="animation-delay: 0.3s">
+          <div class="flex items-center space-x-4">
+            <div class="h-12 w-12 rounded-xl bg-blue-500/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+              <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path>
+              </svg>
+            </div>
+            <div>
+              <p class="text-sm font-medium text-muted-foreground">Avg Turbidity</p>
+              <p class="text-3xl font-bold text-foreground">${avgTurbidity.toFixed(1)} NTU</p>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Update charts
+    function updateCharts(data) {
+      // Cases trend chart
       const byDay = new Map();
-      (reps.items || []).forEach(r => {
+      data.forEach(r => {
         const d = (r.timestamp || '').slice(0,10);
         byDay.set(d, (byDay.get(d) || 0) + (r.cases || 0));
       });
       const labels = Array.from(byDay.keys()).sort();
       const values = labels.map(k => byDay.get(k));
-      new Chart(document.getElementById('trendChart').getContext('2d'), { type:'line', data:{ labels, datasets:[{ label:'Cases', data:values, borderColor:'#2c7'}]}});
 
-      const list = alertsBox;
-      list.innerHTML = '';
-      const arr = alerts.alerts || [];
-      if (arr.length === 0) {
-        const empty = document.createElement('div');
-        empty.className = 'card';
-        empty.textContent = 'No alerts yet.';
-        list.appendChild(empty);
-      }
-      arr.forEach(a => {
-        const div = document.createElement('div');
-        div.className = 'card';
-        const risk = (a.risk || 'Low').toLowerCase();
-        div.innerHTML = `<strong>${a.location_name}</strong> <span class="badge ${risk}">${a.risk}</span><br>${a.message} — ${a.details}`;
-        list.appendChild(div);
+      if (trendChart) trendChart.destroy();
+      trendChart = new Chart(document.getElementById('trendChart').getContext('2d'), {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [{
+            label: 'Cases',
+            data: values,
+            borderColor: '#0ea5a6',
+            backgroundColor: 'rgba(14, 165, 166, 0.1)',
+            borderWidth: 2,
+            fill: true,
+            tension: 0.4
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false }
+          },
+          scales: {
+            y: { beginAtZero: true }
+          }
+        }
       });
+
+      // Risk distribution chart
+      const riskCounts = { Low: 0, Medium: 0, High: 0 };
+      data.forEach(r => riskCounts[riskOf(r)]++);
+
+      if (riskChart) riskChart.destroy();
+      riskChart = new Chart(document.getElementById('riskChart').getContext('2d'), {
+        type: 'doughnut',
+        data: {
+          labels: ['Low', 'Medium', 'High'],
+          datasets: [{
+            data: [riskCounts.Low, riskCounts.Medium, riskCounts.High],
+            backgroundColor: ['#10b981', '#f59e0b', '#ef4444'],
+            borderWidth: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'bottom' }
+          }
+        }
+      });
+    }
+
+    // Update alerts
+    function updateAlerts(alerts, riskFilter) {
+      const alertsBox = document.getElementById('alerts');
+      const filteredAlerts = alerts.filter(a => riskFilter === 'all' || a.risk === riskFilter);
+      
+      if (filteredAlerts.length === 0) {
+        alertsBox.innerHTML = '<div class="text-center text-gray-500 dark:text-gray-400 py-8">No alerts found</div>';
+        return;
+      }
+
+      alertsBox.innerHTML = filteredAlerts.map(a => `
+        <div class="mb-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
+          <div class="flex items-start justify-between">
+            <div class="flex-1">
+              <h4 class="font-semibold text-gray-900 dark:text-white">${a.location_name || 'Unknown'}</h4>
+              <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">${a.message}</p>
+              <p class="text-xs text-gray-500 dark:text-gray-500 mt-2">${a.details}</p>
+            </div>
+            <span class="ml-2 px-2 py-1 text-xs font-medium rounded-full ${
+              a.risk === 'High' ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200' :
+              a.risk === 'Medium' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' :
+              'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+            }">${a.risk}</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Main load function
+    async function load() {
+      const alertsBox = document.getElementById('alerts');
+      alertsBox.innerHTML = '<div class="text-center text-gray-500 dark:text-gray-400 py-8">Loading...</div>';
+      
+      try {
+        const [repRes, alertRes] = await Promise.all([
+          fetch('/api/reports?limit=100'), 
+          fetch('/api/alerts?limit=100')
+        ]);
+        
+        if (!repRes.ok || !alertRes.ok) throw new Error('API error');
+        
+        const reps = await repRes.json();
+        const alerts = await alertRes.json();
+        const data = reps.items || [];
+        const riskFilter = document.getElementById('riskFilter').value;
+
+        // Update stats cards
+        createStatsCards(data);
+
+        // Update map
+        layer.clearLayers();
+        data.forEach(r => {
+          if (r.lat && r.lng) {
+            const risk = riskOf(r);
+            if (riskFilter === 'all' || risk === riskFilter) {
+              const color = colorFor(risk);
+              L.circleMarker([r.lat, r.lng], { 
+                radius: 8, 
+                color, 
+                fillColor: color, 
+                fillOpacity: 0.8, 
+                weight: 2 
+              }).bindPopup(`
+                <div class="p-2">
+                  <h3 class="font-semibold">${r.location_name || 'Unknown'}</h3>
+                  <p class="text-sm">Risk: <span class="font-medium">${risk}</span></p>
+                  <p class="text-sm">Cases: ${r.cases ?? '-'}</p>
+                  <p class="text-sm">Turbidity: ${r.turbidity ?? '-'} NTU</p>
+                </div>
+              `).addTo(layer);
+            }
+          }
+        });
+
+        // Update charts
+        updateCharts(data);
+
+        // Update alerts
+        updateAlerts(alerts.alerts || [], riskFilter);
+
       } catch (err) {
         const alertsBox = document.getElementById('alerts');
-        alertsBox.innerHTML = '';
-        const error = document.createElement('div');
-        error.className = 'card';
-        error.textContent = 'Failed to load dashboard data. Ensure the server and MongoDB are running.';
-        alertsBox.appendChild(error);
+        alertsBox.innerHTML = '<div class="text-center text-red-500 dark:text-red-400 py-8">Failed to load dashboard data</div>';
         console.error(err);
       }
     }
+
+    // Event listeners
+    document.getElementById('refreshBtn').addEventListener('click', load);
+    document.getElementById('riskFilter').addEventListener('change', load);
+    
+    // Initial load
     load();
   </script>
 {% endblock %}

@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify
 from datetime import datetime
 import csv
 import os
+import threading
 from database.db import mongo
 
 
@@ -10,24 +11,30 @@ health_bp = Blueprint("health", __name__)
 
 CSV_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "database", "reports.csv")
 
+# Canonical CSV field order must match existing file schema
+CSV_FIELDS = [
+    "timestamp",
+    "reporter",
+    "symptoms",
+    "cases",
+    "turbidity",
+    "ph",
+    "chlorine",
+    "lat",
+    "lng",
+    "location_name",
+]
+
+# Simple process-level lock to avoid interleaved writes
+csv_lock = threading.Lock()
+
 
 def ensure_csv_header():
     os.makedirs(os.path.dirname(CSV_PATH), exist_ok=True)
     if not os.path.exists(CSV_PATH):
         with open(CSV_PATH, mode="w", newline="", encoding="utf-8") as f:
             writer = csv.writer(f)
-            writer.writerow([
-                "timestamp",
-                "reporter",
-                "location_name",
-                "lat",
-                "lng",
-                "symptoms",
-                "cases",
-                "turbidity",
-                "ph",
-                "chlorine",
-            ])
+            writer.writerow(CSV_FIELDS)
 
 
 def compute_risk(cases: int | None, turbidity: float | None) -> str:
@@ -118,21 +125,24 @@ def report():
     # Also append to CSV as a portable log (fallback)
     try:
         ensure_csv_header()
-        with open(CSV_PATH, mode="a", newline="", encoding="utf-8") as f:
-            writer = csv.writer(f)
-            writer.writerow([
-                timestamp,
-                reporter or "",
-                location_name or "",
-                lat if lat is not None else "",
-                lng if lng is not None else "",
-                symptoms or "",
-                cases if cases is not None else "",
-                turbidity if turbidity is not None else "",
-                ph if ph is not None else "",
-                chlorine if chlorine is not None else "",
-            ])
+        row = [
+            timestamp,
+            reporter or "",
+            symptoms or "",
+            cases if cases is not None else "",
+            turbidity if turbidity is not None else "",
+            ph if ph is not None else "",
+            chlorine if chlorine is not None else "",
+            lat if lat is not None else "",
+            lng if lng is not None else "",
+            location_name or "",
+        ]
+        with csv_lock:
+            with open(CSV_PATH, mode="a", newline="", encoding="utf-8") as f:
+                writer = csv.writer(f)
+                writer.writerow(row)
     except Exception:
+        # Intentionally ignore CSV fallback errors to not block API success
         pass
 
     return jsonify({"status": "ok", "risk": compute_risk(cases, turbidity)}), 201

@@ -1,21 +1,130 @@
 {% extends 'base.html' %}
 {% block title %}HealthCore - Safe Water{% endblock %}
 {% block content %}
-  <section class="hero">
-    <div class="hero-text">
-      <h1>
-        <span class="green">Safe</span> water today, <br>
-        <span class="green">stronger</span> communities <br>
-        tomorrow.
-      </h1>
-      <p>Community-driven surveillance for waterborne diseases.</p>
-      <div class="hero-actions">
-        <a class="btn" href="/report">Submit Report</a>
-        <a class="btn btn-secondary" href="/alerts">View Dashboard</a>
+  <!-- Hero Section -->
+  <section class="relative overflow-hidden bg-gradient-to-br from-primary/5 via-background to-accent/5">
+    <div class="absolute inset-0 bg-grid-pattern opacity-5"></div>
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+        <!-- Hero Content -->
+        <div class="text-center lg:text-left animate-fade-in">
+          <div class="inline-flex items-center rounded-full border px-3 py-1 text-sm bg-background/80 backdrop-blur-sm mb-6 animate-slide-up">
+            <div class="h-2 w-2 rounded-full bg-primary mr-2 animate-pulse-slow"></div>
+            Community Health Monitoring
+          </div>
+          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground leading-tight mb-6 animate-slide-up">
+            <span class="text-primary">Safe</span> water today,<br>
+            <span class="text-primary">stronger</span> communities<br>
+            tomorrow.
+          </h1>
+          <p class="text-lg sm:text-xl text-muted-foreground leading-relaxed max-w-2xl mx-auto lg:mx-0 mb-8 animate-slide-up">
+            Community-driven surveillance for waterborne diseases. Monitor water quality, track outbreaks, and protect your community's health with real-time data and insights.
+          </p>
+          <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start animate-bounce-in">
+            <a href="/report" class="group inline-flex items-center justify-center rounded-lg bg-primary px-8 py-4 text-sm font-medium text-primary-foreground shadow-lg hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 transition-all duration-200 hover:scale-105 hover:shadow-xl">
+              <svg class="w-5 h-5 mr-2 group-hover:rotate-12 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+              </svg>
+              Submit Report
+            </a>
+            <a href="/alerts" class="group inline-flex items-center justify-center rounded-lg border border-input bg-background px-8 py-4 text-sm font-medium text-foreground shadow-sm hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 transition-all duration-200 hover:scale-105 hover:shadow-lg">
+              <svg class="w-5 h-5 mr-2 group-hover:rotate-12 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+              </svg>
+              View Dashboard
+            </a>
+          </div>
+        </div>
+        
+        <!-- Hero Image -->
+        <div class="flex justify-center lg:justify-end animate-fade-in">
+          <div class="relative group">
+            <div class="absolute -inset-4 bg-gradient-to-r from-primary/20 to-accent/20 rounded-3xl blur-2xl group-hover:blur-3xl transition-all duration-500"></div>
+            <div class="relative bg-card rounded-2xl p-8 shadow-2xl border">
+              <img src="/static/images/illustration.png" alt="People celebrating clean water" class="w-full max-w-md lg:max-w-lg xl:max-w-xl rounded-lg group-hover:scale-105 transition-transform duration-500">
+            </div>
+            <div class="absolute -top-6 -right-6 w-24 h-24 bg-primary/20 rounded-full blur-xl animate-pulse-slow"></div>
+            <div class="absolute -bottom-6 -left-6 w-32 h-32 bg-accent/20 rounded-full blur-xl animate-pulse-slow"></div>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="hero-image">
-      <img src="/static/images/illustration.png" alt="People celebrating clean water">
+  </section>
+
+  <!-- Features Section -->
+  <section class="py-20 bg-muted/30">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16 animate-fade-in">
+        <h2 class="text-3xl sm:text-4xl font-bold text-foreground mb-4">How It Works</h2>
+        <p class="text-lg text-muted-foreground max-w-2xl mx-auto">Simple steps to protect your community with our comprehensive health monitoring platform</p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Feature 1 -->
+        <div class="group relative bg-card rounded-xl border p-8 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 animate-slide-up">
+          <div class="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          <div class="relative">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-xl bg-primary/10 text-primary mb-6 group-hover:scale-110 transition-transform duration-300">
+              <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+              </svg>
+            </div>
+            <h3 class="text-xl font-semibold text-foreground mb-3 group-hover:text-primary transition-colors duration-300">Report Issues</h3>
+            <p class="text-muted-foreground leading-relaxed">Submit water quality reports and health concerns in your area with our intuitive reporting system</p>
+          </div>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="group relative bg-card rounded-xl border p-8 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 animate-slide-up" style="animation-delay: 0.1s">
+          <div class="absolute inset-0 bg-gradient-to-br from-accent/5 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          <div class="relative">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-xl bg-accent/10 text-accent-foreground mb-6 group-hover:scale-110 transition-transform duration-300">
+              <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+              </svg>
+            </div>
+            <h3 class="text-xl font-semibold text-foreground mb-3 group-hover:text-accent-foreground transition-colors duration-300">Monitor Trends</h3>
+            <p class="text-muted-foreground leading-relaxed">Track patterns and identify high-risk areas on our interactive dashboard with real-time analytics</p>
+          </div>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="group relative bg-card rounded-xl border p-8 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 animate-slide-up" style="animation-delay: 0.2s">
+          <div class="absolute inset-0 bg-gradient-to-br from-green-500/5 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          <div class="relative">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-xl bg-green-500/10 text-green-600 dark:text-green-400 mb-6 group-hover:scale-110 transition-transform duration-300">
+              <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+              </svg>
+            </div>
+            <h3 class="text-xl font-semibold text-foreground mb-3 group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors duration-300">Stay Protected</h3>
+            <p class="text-muted-foreground leading-relaxed">Get instant alerts and take proactive action to protect your community's health and safety</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Section -->
+  <section class="py-20 bg-background">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+        <div class="text-center animate-fade-in">
+          <div class="text-3xl sm:text-4xl font-bold text-primary mb-2">500+</div>
+          <div class="text-sm text-muted-foreground">Reports Submitted</div>
+        </div>
+        <div class="text-center animate-fade-in" style="animation-delay: 0.1s">
+          <div class="text-3xl sm:text-4xl font-bold text-primary mb-2">50+</div>
+          <div class="text-sm text-muted-foreground">Communities</div>
+        </div>
+        <div class="text-center animate-fade-in" style="animation-delay: 0.2s">
+          <div class="text-3xl sm:text-4xl font-bold text-primary mb-2">99%</div>
+          <div class="text-sm text-muted-foreground">Accuracy Rate</div>
+        </div>
+        <div class="text-center animate-fade-in" style="animation-delay: 0.3s">
+          <div class="text-3xl sm:text-4xl font-bold text-primary mb-2">24/7</div>
+          <div class="text-sm text-muted-foreground">Monitoring</div>
+        </div>
+      </div>
     </div>
   </section>
 {% endblock %}

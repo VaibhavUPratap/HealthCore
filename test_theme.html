@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Theme Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class'
+        }
+    </script>
+    <style>
+        :root {
+            --bg: #ffffff;
+            --fg: #0f172a;
+            --card: #ffffff;
+            --border: #e5e7eb;
+        }
+        :root.dark {
+            --bg: #0f172a;
+            --fg: #f1f5f9;
+            --card: #1e293b;
+            --border: #334155;
+        }
+        body {
+            background-color: var(--bg);
+            color: var(--fg);
+            transition: all 0.3s ease;
+        }
+        .test-card {
+            background-color: var(--card);
+            border: 1px solid var(--border);
+            padding: 1rem;
+            border-radius: 0.5rem;
+        }
+    </style>
+</head>
+<body class="p-8">
+    <div class="max-w-md mx-auto">
+        <h1 class="text-2xl font-bold mb-4">Theme Test</h1>
+        <div class="test-card mb-4">
+            <p>This is a test card to see if the theme changes work.</p>
+        </div>
+        <button id="themeToggle" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+            Toggle Theme
+        </button>
+    </div>
+
+    <script>
+        const root = document.documentElement;
+        const btn = document.getElementById('themeToggle');
+        
+        btn.addEventListener('click', () => {
+            root.classList.toggle('dark');
+            console.log('Theme toggled, dark class present:', root.classList.contains('dark'));
+        });
+        
+        console.log('Theme test page loaded');
+    </script>
+</body>
+</html>
