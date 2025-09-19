@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HealthCore</title>
+  <link rel="stylesheet" href="gptstyle.css">
+</head>
+<body>
+  <div class="container">
+    <div class="welcome-box">
+      <h1>HealthCore</h1>
+      <p>Smart Health Surveillance App for Early detection and prevention of water-borne diseases</p>
+
+      <!-- Step 1: Role Selection -->
+      <div class="role-toggle">
+        <button id="userBtn" class="active">User</button>
+        <button id="ashaBtn">ASHA Worker</button>
+      </div>
+
+      <!-- Step 2: Login/Signup Toggle -->
+      <div class="form-toggle">
+        <button id="loginBtn" class="active">Login</button>
+        <button id="signupBtn">Sign Up</button>
+      </div>
+
+      <!-- Login Form -->
+      <form id="loginForm" class="form active">
+        <input type="email" placeholder="Email" required />
+        <input type="password" placeholder="Password" required />
+        <button type="submit">Login</button>
+      </form>
+
+      <!-- Signup Form -->
+      <form id="signupForm" class="form">
+        <input type="text" placeholder="Full Name" required />
+        <input type="email" placeholder="Email" required />
+        <input type="password" placeholder="Password" required />
+        <button type="submit">Sign Up</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Role Toggle
+    const userBtn = document.getElementById("userBtn");
+    const ashaBtn = document.getElementById("ashaBtn");
+
+    userBtn.addEventListener("click", () => {
+      userBtn.classList.add("active");
+      ashaBtn.classList.remove("active");
+    });
+
+    ashaBtn.addEventListener("click", () => {
+      ashaBtn.classList.add("active");
+      userBtn.classList.remove("active");
+    });
+
+    // Login/Signup Toggle
+    const loginBtn = document.getElementById("loginBtn");
+    const signupBtn = document.getElementById("signupBtn");
+    const loginForm = document.getElementById("loginForm");
+    const signupForm = document.getElementById("signupForm");
+
+    loginBtn.addEventListener("click", () => {
+      loginForm.classList.add("active");
+      signupForm.classList.remove("active");
+      loginBtn.classList.add("active");
+      signupBtn.classList.remove("active");
+    });
+
+    signupBtn.addEventListener("click", () => {
+      signupForm.classList.add("active");
+      loginForm.classList.remove("active");
+      signupBtn.classList.add("active");
+      loginBtn.classList.remove("active");
+    });
+  </script>
+</body>
+</html>
