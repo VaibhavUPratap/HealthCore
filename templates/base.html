@@ -125,29 +125,38 @@
   {% block head %}{% endblock %}
 </head>
 <body>
-  <header class="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+  <header class="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-lg">
     <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex h-16 items-center justify-between">
+      <div class="flex h-18 items-center justify-between">
         <div class="flex items-center space-x-4">
-          <div class="flex items-center space-x-2">
-            <div class="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
+          <div class="flex items-center space-x-3 group">
+            <div class="h-10 w-10 rounded-xl bg-gradient-to-r from-primary to-accent flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
               <img src="/static/images/logo.png" alt="HealthCore logo" class="h-6 w-6">
             </div>
-            <span class="text-xl font-bold text-foreground">HealthCore</span>
+            <span class="text-2xl font-bold text-foreground group-hover:text-primary transition-colors duration-300">HealthCore</span>
           </div>
         </div>
-        <div class="flex items-center space-x-6">
-          <a href="/" class="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors duration-200 hover:scale-105 transform">Home</a>
-          <a href="/report" class="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors duration-200 hover:scale-105 transform">Report</a>
-          <a href="/alerts" class="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors duration-200 hover:scale-105 transform">Dashboard</a>
-          <button id="themeToggle" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-3" type="button" aria-label="Toggle theme">
-            <svg id="sunIcon" class="h-4 w-4 mr-2 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="flex items-center space-x-8">
+          <a href="/" class="group text-sm font-medium text-muted-foreground hover:text-foreground transition-all duration-300 hover:scale-105 transform relative">
+            <span class="relative z-10">Home</span>
+            <div class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-primary to-accent group-hover:w-full transition-all duration-300"></div>
+          </a>
+          <a href="/report" class="group text-sm font-medium text-muted-foreground hover:text-foreground transition-all duration-300 hover:scale-105 transform relative">
+            <span class="relative z-10">Report</span>
+            <div class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-primary to-accent group-hover:w-full transition-all duration-300"></div>
+          </a>
+          <a href="/alerts" class="group text-sm font-medium text-muted-foreground hover:text-foreground transition-all duration-300 hover:scale-105 transform relative">
+            <span class="relative z-10">Dashboard</span>
+            <div class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-primary to-accent group-hover:w-full transition-all duration-300"></div>
+          </a>
+          <button id="themeToggle" class="group inline-flex items-center justify-center rounded-xl text-sm font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border-2 border-primary/20 bg-background/80 backdrop-blur-sm hover:bg-primary/5 hover:border-primary/40 h-10 px-4 shadow-lg hover:shadow-xl hover:scale-105 transform" type="button" aria-label="Toggle theme">
+            <svg id="sunIcon" class="h-4 w-4 mr-2 hidden dark:block group-hover:rotate-180 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
             </svg>
-            <svg id="moonIcon" class="h-4 w-4 mr-2 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg id="moonIcon" class="h-4 w-4 mr-2 block dark:hidden group-hover:rotate-180 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
             </svg>
-            <span id="themeText">Dark mode</span>
+            <span id="themeText" class="font-medium">Dark mode</span>
           </button>
         </div>
       </div>

@@ -3,29 +3,38 @@
 {% block content %}
   <div class="min-h-screen bg-muted/30">
     <!-- Header -->
-    <div class="bg-card shadow-sm border-b">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="bg-gradient-to-r from-card via-card to-card/80 shadow-xl border-b relative overflow-hidden">
+      <!-- Background decoration -->
+      <div class="absolute inset-0 bg-grid-pattern opacity-5"></div>
+      <div class="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl"></div>
+      <div class="absolute bottom-0 left-0 w-96 h-96 bg-accent/5 rounded-full blur-3xl"></div>
+      
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between animate-fade-in">
           <div>
-            <div class="inline-flex items-center rounded-full border px-3 py-1 text-sm bg-background/80 backdrop-blur-sm mb-4">
-              <div class="h-2 w-2 rounded-full bg-primary mr-2 animate-pulse-slow"></div>
-              Real-time Monitoring
+            <div class="inline-flex items-center rounded-full border px-4 py-2 text-sm bg-background/80 backdrop-blur-sm mb-6 shadow-lg">
+              <div class="h-2 w-2 rounded-full bg-primary mr-3 animate-pulse-slow"></div>
+              <span class="font-medium">AI-Powered Real-time Monitoring</span>
             </div>
-            <h1 class="text-4xl font-bold text-foreground mb-2">Health Dashboard</h1>
-            <p class="text-lg text-muted-foreground">Monitor water quality and disease outbreaks with comprehensive analytics</p>
+            <h1 class="text-5xl sm:text-6xl font-bold text-foreground mb-4">
+              <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">Health</span> Dashboard
+            </h1>
+            <p class="text-xl text-muted-foreground max-w-2xl leading-relaxed">
+              Monitor water quality and disease outbreaks with comprehensive AI-powered analytics and real-time insights
+            </p>
           </div>
-          <div class="mt-6 sm:mt-0 flex flex-col sm:flex-row gap-4">
-            <select id="riskFilter" class="flex h-10 w-full sm:w-[200px] rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 hover:border-primary/50 transition-all duration-200">
+          <div class="mt-8 sm:mt-0 flex flex-col sm:flex-row gap-4">
+            <select id="riskFilter" class="flex h-12 w-full sm:w-[220px] rounded-xl border-2 border-primary/20 bg-background/80 backdrop-blur-sm px-4 py-3 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 hover:border-primary/40 transition-all duration-300 shadow-lg">
               <option value="all">All Risk Levels</option>
               <option value="High">High Risk</option>
               <option value="Medium">Medium Risk</option>
               <option value="Low">Low Risk</option>
             </select>
-            <button id="refreshBtn" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 hover:scale-105 transform shadow-lg hover:shadow-xl">
-              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <button id="refreshBtn" class="group inline-flex items-center justify-center rounded-xl text-sm font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-gradient-to-r from-primary to-primary/90 text-primary-foreground hover:from-primary/90 hover:to-primary h-12 px-6 py-3 hover:scale-105 transform shadow-xl hover:shadow-2xl">
+              <svg class="w-5 h-5 mr-2 group-hover:rotate-180 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
               </svg>
-              Refresh
+              Refresh Data
             </button>
           </div>
         </div>
@@ -143,19 +152,26 @@
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' }).addTo(map);
     const layer = L.layerGroup().addTo(map);
 
-    // Risk calculation
+    // Risk calculation - use AI prediction if available, otherwise fallback to simple calculation
     function riskOf(r) {
+      // If AI prediction is available, use it
+      if (r.ai_prediction) {
+        return r.ai_prediction;
+      }
+      
+      // Fallback to simple calculation
       const cases = r.cases || 0;
       const turbidity = r.turbidity || 0;
-      if (cases > 10 || turbidity > 20) return 'High';
-      if (cases > 5 || turbidity > 10) return 'Medium';
-      return 'Low';
+      if (cases > 10 || turbidity > 20) return 'High Risk';
+      if (cases > 5 || turbidity > 10) return 'Medium Risk';
+      return 'Low Risk';
     }
 
     function colorFor(risk) {
-      if (risk === 'High') return '#ef4444';
-      if (risk === 'Medium') return '#f59e0b';
-      return '#10b981';
+      if (risk === 'High Risk' || risk === 'High') return '#ef4444';
+      if (risk === 'Medium Risk' || risk === 'Medium') return '#f59e0b';
+      if (risk === 'Low Risk' || risk === 'Low') return '#10b981';
+      return '#6b7280'; // Default gray for unknown
     }
 
     // Legend
@@ -179,7 +195,7 @@
       const statsCards = document.getElementById('statsCards');
       const totalReports = data.length;
       const totalCases = data.reduce((sum, r) => sum + (r.cases || 0), 0);
-      const highRisk = data.filter(r => riskOf(r) === 'High').length;
+      const highRisk = data.filter(r => riskOf(r) === 'High Risk' || riskOf(r) === 'High').length;
       const avgTurbidity = data.filter(r => r.turbidity).reduce((sum, r) => sum + r.turbidity, 0) / data.filter(r => r.turbidity).length || 0;
 
       statsCards.innerHTML = `
@@ -277,17 +293,27 @@
       });
 
       // Risk distribution chart
-      const riskCounts = { Low: 0, Medium: 0, High: 0 };
-      data.forEach(r => riskCounts[riskOf(r)]++);
+      const riskCounts = { 'Low Risk': 0, 'Medium Risk': 0, 'High Risk': 0, 'No Risk': 0 };
+      data.forEach(r => {
+        const risk = riskOf(r);
+        if (riskCounts.hasOwnProperty(risk)) {
+          riskCounts[risk]++;
+        } else {
+          // Handle legacy format
+          if (risk === 'Low') riskCounts['Low Risk']++;
+          else if (risk === 'Medium') riskCounts['Medium Risk']++;
+          else if (risk === 'High') riskCounts['High Risk']++;
+        }
+      });
 
       if (riskChart) riskChart.destroy();
       riskChart = new Chart(document.getElementById('riskChart').getContext('2d'), {
         type: 'doughnut',
         data: {
-          labels: ['Low', 'Medium', 'High'],
+          labels: ['Low Risk', 'Medium Risk', 'High Risk', 'No Risk'],
           datasets: [{
-            data: [riskCounts.Low, riskCounts.Medium, riskCounts.High],
-            backgroundColor: ['#10b981', '#f59e0b', '#ef4444'],
+            data: [riskCounts['Low Risk'], riskCounts['Medium Risk'], riskCounts['High Risk'], riskCounts['No Risk']],
+            backgroundColor: ['#10b981', '#f59e0b', '#ef4444', '#6b7280'],
             borderWidth: 0
           }]
         },
@@ -368,7 +394,9 @@
                   <h3 class="font-semibold">${r.location_name || 'Unknown'}</h3>
                   <p class="text-sm">Risk: <span class="font-medium">${risk}</span></p>
                   <p class="text-sm">Cases: ${r.cases ?? '-'}</p>
-                  <p class="text-sm">Turbidity: ${r.turbidity ?? '-'} NTU</p>
+                  <p class="text-sm">pH: ${r.ph ?? '-'}</p>
+                  ${r.ai_confidence ? `<p class="text-sm">AI Confidence: ${Math.round(r.ai_confidence * 100)}%</p>` : ''}
+                  ${r.turbidity ? `<p class="text-sm">Turbidity: ${r.turbidity} NTU</p>` : ''}
                 </div>
               `).addTo(layer);
             }

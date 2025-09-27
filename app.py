@@ -25,6 +25,7 @@ def create_app():
     def alerts_page():
         return render_template("alerts.html")
 
+
     @app.errorhandler(404)
     def not_found(_):
         return "Not Found", 404

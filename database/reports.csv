@@ -1,5 +1,53 @@
-timestamp,reporter,symptoms,cases,turbidity,ph,chlorine,lat,lng,location_name
-2025-09-18T16:14:59.469713,Vaibhav,Luckk,10,0.5,0.7,0.2,12.660494,77.45537,Chitradurga
-2025-09-18T16:20:32.722658,Deeps,Strong,100,0.2,8.0,0.2,12.659462,77.449669,Bengalore 
-2025-09-18T16:34:35.608294,Vaibhav,fever,5,0.2,7.0,0.2,12.66053,77.455376,Chitradurga
-2025-09-27T17:55:05.322342,Vaibhav,diarrhea,12,0.2,7.5,0.2,24.0,89.0,assam
+timestamp,reporter,symptoms,cases,turbidity,ph,chlorine,lat,lng,location_name,tds,fluoride,nitrate,chloride,ec,ai_prediction,ai_confidence
+2025-09-27T20:52:30.119879,Dr. Kavita Joshi,No symptoms,10,8.4,8.0,0.2,12.979418155056834,77.598096422523,Bangalore Tech Park,448.0,0.34,13.3,62.3,1022.4,Medium Risk,0.92
+2025-09-27T20:52:32.158205,Dr. Neha Singh,"Mild fever, stomach upset",4,20.4,7.5,1.0,9.916721934572061,78.12574381876385,Madurai Temple,452.0,0.82,10.0,144.0,623.7,Low Risk,0.88
+2025-09-27T20:52:34.187455,Ravi Kumar,"Stomach cramps, nausea",2,14.6,7.9,1.6,17.683248707883262,83.22384530179949,Vishakhapatnam Port,342.0,0.29,16.5,138.9,1182.0,Low Risk,0.71
+2025-09-27T20:52:36.237179,Ravi Kumar,"Severe symptoms, hospitalization",10,3.7,7.9,1.4,26.914406622354853,75.7906843131066,Jaipur Pink City,263.0,1.01,8.6,126.9,529.5,Low Risk,0.6
+2025-09-27T20:52:38.283231,Dr. Priya Sharma,"Nausea, vomiting, diarrhea",6,19.1,7.5,0.8,26.847759633619784,80.95095086939696,Lucknow Chowk,550.0,1.17,20.9,39.3,456.2,Medium Risk,0.8
+2025-09-27T20:52:40.321600,Dr. Deepika Rao,"Vomiting, stomach cramps",6,2.0,7.3,1.0,9.918592806980197,78.12038230918371,Madurai Temple,546.0,0.3,10.0,137.5,915.9,Medium Risk,0.96
+2025-09-27T20:52:42.369404,Dr. Pooja Mehta,"Severe symptoms, hospitalization",20,10.4,7.7,1.5,11.023057159525278,76.95816288510211,Coimbatore Textile,721.0,1.47,7.7,52.9,1176.7,Medium Risk,0.85
+2025-09-27T20:52:44.416279,Amit Verma,"Stomach pain, loss of appetite",4,2.3,8.0,1.1,22.576469330818924,88.36975882596835,Kolkata Howrah,562.0,1.25,21.8,110.8,443.8,Medium Risk,0.52
+2025-09-27T20:52:46.450576,Vikram Singh,Watery diarrhea,10,18.2,7.7,1.2,23.268980369020074,77.41614212124956,Bhopal Lake City,769.0,0.9,16.1,124.8,1123.2,Medium Risk,1.0
+2025-09-27T20:52:48.485980,Suresh Gupta,No symptoms reported,0,2.5,7.9,1.1,22.56564596941998,88.35507591483207,Kolkata Howrah,247.0,0.51,22.8,102.4,843.1,No Risk,0.81
+2025-09-27T20:52:50.517866,Dr. Deepika Rao,"Fever, body aches",8,7.4,7.1,1.0,9.93404872404244,78.1225679764866,Madurai Temple,545.0,0.5,22.8,55.1,817.9,Medium Risk,0.94
+2025-09-27T20:52:52.538744,Sandeep Patel,"Mild fever, stomach upset",7,6.2,7.3,1.7,23.263582154420934,77.41029838823067,Bhopal Lake City,716.0,1.01,9.6,82.8,1061.0,Medium Risk,0.98
+2025-09-27T20:52:54.586813,Dr. Deepika Rao,Severe dehydration,5,10.8,7.2,1.8,22.71577576694974,75.8661566791369,Indore Clean City,663.0,0.46,20.1,57.6,944.9,Medium Risk,0.91
+2025-09-27T20:52:56.615787,Amit Verma,"Severe symptoms, hospitalization",15,9.2,7.3,0.2,26.44992055281258,80.3397189040603,Kanpur Industrial,831.0,0.62,5.7,41.0,931.6,Medium Risk,0.93
+2025-09-27T20:52:58.672884,Dr. Sunita Agarwal,No symptoms reported,0,16.3,7.0,1.9,9.921879068786684,76.2736914645513,Kochi Backwaters,587.0,0.89,21.6,60.2,471.4,Low Risk,0.76
+2025-09-27T20:53:00.706652,Dr. Ananya Das,"Fever, body aches",4,18.4,7.9,0.8,23.251100530664743,77.41151592750154,Bhopal Lake City,333.0,0.83,7.5,44.2,711.2,Low Risk,0.94
+2025-09-27T20:53:02.766322,Ravi Kumar,"Diarrhea, dehydration",6,7.9,6.9,1.0,11.01115503221712,76.9499317518832,Coimbatore Textile,509.0,0.83,5.7,95.2,698.6,Medium Risk,0.77
+2025-09-27T20:53:04.812007,Rajesh Kumar,"Headache, fatigue",3,2.2,7.0,1.4,22.722499711581175,75.86117526315485,Indore Clean City,640.0,0.3,19.5,44.3,1113.4,Medium Risk,0.92
+2025-09-27T20:53:06.857045,Dr. Pooja Mehta,"Diarrhea, dehydration",7,12.5,8.2,1.9,22.309886228655316,73.18337052702176,Vadodara Cultural,657.0,1.3,20.2,138.9,431.2,Medium Risk,0.88
+2025-09-27T20:53:08.900486,Kiran Desai,Watery diarrhea,12,8.5,7.0,1.1,17.381677774254257,78.49420721811246,Hyderabad IT Corridor,205.0,1.47,21.2,88.2,939.8,Medium Risk,0.92
+2025-09-27T20:53:10.953534,Dr. Meera Reddy,No symptoms reported,0,2.6,7.4,1.8,19.075889117521513,72.88641778249718,Mumbai Central,476.0,1.5,24.4,82.0,904.9,No Risk,0.51
+2025-09-27T20:53:12.982267,Kiran Desai,No symptoms reported,0,9.9,6.9,2.0,28.705406551152155,77.11129025592217,Delhi NCR,270.0,1.18,7.0,114.2,687.4,Low Risk,0.85
+2025-09-27T20:53:15.022426,Arjun Sharma,"Fever, diarrhea, vomiting",3,6.0,7.7,0.3,23.257615596111314,77.41125289627551,Bhopal Lake City,624.0,0.44,13.1,87.8,694.2,Medium Risk,0.73
+2025-09-27T20:53:17.059812,Dr. Sunita Agarwal,"Diarrhea, dehydration",4,20.6,8.0,0.4,9.931686122079316,76.25810623805386,Kochi Backwaters,703.0,0.57,7.6,70.7,1025.0,Medium Risk,0.51
+2025-09-27T20:53:19.105693,Dr. Pooja Mehta,No symptoms reported,0,18.2,7.7,0.4,22.302979022467518,73.18528222148868,Vadodara Cultural,677.0,0.96,9.9,86.1,1064.0,Low Risk,1.0
+2025-09-27T20:53:21.146052,Dr. Ananya Das,"Stomach upset, nausea",11,24.5,7.8,0.6,17.684575219067234,83.22008836996878,Vishakhapatnam Port,928.0,0.46,5.5,45.9,1177.5,Medium Risk,0.91
+2025-09-27T20:53:23.189688,Suresh Gupta,"Fever, headache",9,18.3,7.1,0.2,9.926993171159657,76.26496742377485,Kochi Backwaters,303.0,0.7,10.1,94.4,1185.5,Medium Risk,0.59
+2025-09-27T20:53:25.227615,Arjun Sharma,"Fever, headache",13,4.0,7.6,0.8,26.44797377911561,80.32858518418577,Kanpur Industrial,513.0,0.43,7.9,110.8,1058.8,Medium Risk,0.93
+2025-09-27T20:53:27.262591,Dr. Kavita Joshi,No symptoms reported,0,10.4,7.3,1.3,9.927149476870124,78.11999346393326,Madurai Temple,484.0,0.98,5.7,123.8,558.4,No Risk,0.77
+2025-09-27T20:53:29.311293,Dr. Neha Singh,"High fever, chills",7,17.7,6.9,0.7,28.7096973817593,77.10268065446509,Delhi NCR,577.0,0.89,23.9,58.7,1167.0,Medium Risk,0.92
+2025-09-27T20:53:31.366749,Suresh Gupta,"Nausea, vomiting, diarrhea",6,19.8,7.5,1.1,23.016623258307334,72.567012546724,Ahmedabad Old City,593.0,0.7,24.1,35.1,467.8,Medium Risk,0.82
+2025-09-27T20:53:33.401190,Dr. Meera Reddy,"Fever, headache",9,5.1,7.9,1.1,22.297889827104573,73.17748049206259,Vadodara Cultural,565.0,0.78,15.0,125.7,1102.6,Medium Risk,0.96
+2025-09-27T20:53:35.428837,Dr. Pooja Mehta,"Fever, body aches",5,19.9,7.3,1.2,28.703344947782504,77.10473033580404,Delhi NCR,681.0,0.33,21.4,54.8,901.6,Medium Risk,0.91
+2025-09-27T20:53:37.463951,Dr. Meera Reddy,"Fever, diarrhea, vomiting",2,20.2,6.9,0.4,12.972774993167773,77.59650034464488,Bangalore Tech Park,369.0,0.48,5.8,122.5,567.4,Medium Risk,0.66
+2025-09-27T20:53:39.504675,Dr. Deepika Rao,"Diarrhea, dehydration",8,18.4,7.5,1.7,12.9782759507082,77.59785304632196,Bangalore Tech Park,456.0,0.65,18.4,121.1,630.0,Low Risk,0.59
+2025-09-27T20:53:41.552795,Sandeep Patel,"Fever, headache",11,24.4,8.0,0.3,22.714144771439507,75.85378134488849,Indore Clean City,424.0,0.23,15.5,113.2,847.9,Medium Risk,0.97
+2025-09-27T20:53:43.609567,Dr. Neha Singh,"Stomach pain, loss of appetite",4,5.6,7.7,1.2,23.261085813409192,77.40586024152176,Bhopal Lake City,365.0,0.95,15.7,141.2,1122.4,Low Risk,0.83
+2025-09-27T20:53:45.645058,Dr. Priya Sharma,"Vomiting, stomach cramps",6,4.4,8.2,1.6,19.07490520996575,72.87791091094206,Mumbai Central,684.0,0.72,16.3,140.6,405.4,Medium Risk,0.92
+2025-09-27T20:53:47.671061,Dr. Meera Reddy,"Headache, fatigue",2,3.9,7.6,1.9,28.71121775183278,77.10993006667005,Delhi NCR,464.0,0.58,13.4,56.4,1047.1,Low Risk,0.82
+2025-09-27T20:53:49.711334,Dr. Meera Reddy,Severe dehydration,7,14.4,8.1,0.6,22.29861694007899,73.17929896354073,Vadodara Cultural,387.0,0.45,12.4,143.3,1025.6,Medium Risk,0.92
+2025-09-27T20:53:51.747159,Dr. Ananya Das,"Stomach cramps, nausea",1,10.2,7.4,1.5,9.92548969867973,76.27206131750366,Kochi Backwaters,363.0,0.94,7.8,102.0,500.4,Low Risk,0.9
+2025-09-27T20:53:53.780527,Dr. Meera Reddy,"Fever, headache",9,14.7,7.3,0.2,22.302723341755485,73.18242846758224,Vadodara Cultural,735.0,0.59,21.5,68.2,1082.3,Medium Risk,0.98
+2025-09-27T20:53:55.822599,Dr. Sunita Agarwal,"Diarrhea, dehydration",4,10.6,8.0,1.2,18.52640545865205,73.85333165591655,Pune University,710.0,0.43,23.0,79.1,733.2,Medium Risk,0.84
+2025-09-27T20:53:57.870520,Arjun Sharma,"Fever, diarrhea, vomiting",1,16.5,7.5,1.0,9.918973622896631,78.1240121645177,Madurai Temple,481.0,0.9,8.0,42.5,752.9,Low Risk,0.96
+2025-09-27T20:53:59.926264,Vikram Singh,"Abdominal pain, fever",1,7.8,7.2,1.0,21.150316621132497,79.0826827987562,Nagpur Orange City,549.0,1.2,22.6,107.7,1031.4,Low Risk,0.73
+2025-09-27T20:54:01.960929,Dr. Ananya Das,No symptoms reported,0,18.6,8.2,1.8,26.849526290505363,80.9468537322187,Lucknow Chowk,736.0,0.69,19.3,72.6,673.6,Low Risk,0.67
+2025-09-27T20:54:04.004630,Dr. Deepika Rao,"Severe symptoms, hospitalization",12,4.7,7.3,0.3,22.7210128799928,75.85916451580577,Indore Clean City,235.0,1.13,13.0,88.6,545.7,Medium Risk,0.99
+2025-09-27T20:54:06.057989,Rajesh Kumar,"Mild symptoms, fatigue",7,16.2,8.2,0.1,26.839889369146437,80.95249173087032,Lucknow Chowk,337.0,0.94,7.4,86.3,984.1,Medium Risk,0.89
+2025-09-27T20:54:08.093340,Rohit Kumar,"Mild symptoms, fatigue",8,3.6,7.4,1.3,9.929981924654554,78.1256420463732,Madurai Temple,585.0,0.35,12.8,109.2,835.2,Medium Risk,0.95
+2025-09-27T20:54:10.153942,Dr. Kavita Joshi,No symptoms reported,0,5.2,7.9,2.0,13.078404141884604,80.27997876761526,Chennai Marina,934.0,0.62,11.3,63.6,539.0,Low Risk,0.82
+2025-09-27T21:02:23.087466,Test User Final,,15,,6.5,,19.076,72.8777,Test Location Final,800.0,1.2,20.0,120.0,1000.0,Medium Risk,0.84
+2025-09-27T21:05:28.508044,Vaibhav,fever,10,0.2,7.4,0.2,12.660534,77.455333,Bengalore ,414.0,0.35,13.0,50.0,643.0,Medium Risk,0.99
