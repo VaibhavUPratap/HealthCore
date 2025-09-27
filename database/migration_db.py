@@ -1,6 +1,6 @@
 # database/migration_db.py
 import logging
-from db import init_db, get_collection
+from .db import init_db, get_collection
 
 # setup basic logging so you see output in console
 logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")

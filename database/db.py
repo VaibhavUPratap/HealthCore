@@ -116,3 +116,9 @@ def close_db():
         logger.info("MongoDB client was already None.")
     global db
     db = None
+
+class _MongoCompat:
+    def __init__(self, db):
+        self.db = db
+
+mongo = _MongoCompat(db)
