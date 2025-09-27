@@ -1,17 +1,20 @@
 # database/db.py
 import os
+import time
 import logging
+from typing import Optional
 from pymongo import MongoClient, ASCENDING, DESCENDING
-from pymongo.errors import ServerSelectionTimeoutError, OperationFailure
+from pymongo.errors import ServerSelectionTimeoutError, PyMongoError
 from dotenv import load_dotenv
 
 load_dotenv()
-
 logger = logging.getLogger(__name__)
 
-client = None
+# Globals
+client: Optional[MongoClient] = None
 db = None
 
+# Collection registry
 COLLECTIONS = {
     "USERS": "users",
     "DATASETS": "datasets",
@@ -22,68 +25,59 @@ COLLECTIONS = {
     "SESSIONS": "sessions",
 }
 
-def _safe_create_index(collection, *args, **kwargs):
-    try:
-        collection.create_index(*args, **kwargs)
-        logger.debug("Index created on %s args=%s kwargs=%s", collection.name, args, kwargs)
-    except OperationFailure as e:
-        logger.error("Index creation failed on %s: %s", collection.name, e)
-    except Exception as e:
-        logger.exception("Unexpected error creating index on %s: %s", collection.name, e)
+# Retry controls
+CONNECT_RETRIES = int(os.environ.get("MONGO_CONNECT_RETRIES", "3"))
+CONNECT_BACKOFF_SEC = float(os.environ.get("MONGO_CONNECT_BACKOFF_SEC", "1.0"))
+
 
 def ensure_indexes(database):
-    skip = os.environ.get("SKIP_INDEX_CREATION", "false").lower() in ("1", "true", "yes")
-    if skip:
-        logger.info("Skipping index creation due to SKIP_INDEX_CREATION")
-        return
+    """Create helpful indexes (idempotent)."""
+    database[COLLECTIONS["USERS"]].create_index("email", unique=True)
+    database[COLLECTIONS["DATASETS"]].create_index(
+        [("location_name", ASCENDING), ("timestamp", DESCENDING)]
+    )
+    database[COLLECTIONS["PREDICTIONS"]].create_index("created_at")
+    database[COLLECTIONS["REPORTS"]].create_index([("created_at", DESCENDING)])
+    database[COLLECTIONS["ALERTS"]].create_index(
+        [("level", ASCENDING), ("created_at", DESCENDING)]
+    )
+    # TTL cleanup
+    database[COLLECTIONS["ALERTS"]].create_index(
+        "created_at", expireAfterSeconds=60 * 60 * 24 * 90
+    )
+    database[COLLECTIONS["LOGS"]].create_index(
+        "created_at", expireAfterSeconds=60 * 60 * 24 * 30
+    )
 
-    # Users: unique email
-    _safe_create_index(database[COLLECTIONS["USERS"]], "email", unique=True)
 
-    # Datasets: location + timestamp
-    _safe_create_index(database[COLLECTIONS["DATASETS"]],
-                       [("location_name", ASCENDING), ("timestamp", DESCENDING)])
-
-    # Predictions
-    _safe_create_index(database[COLLECTIONS["PREDICTIONS"]], "created_at")
-
-    # Reports
-    _safe_create_index(database[COLLECTIONS["REPORTS"]], [("created_at", DESCENDING)])
-
-    # Alerts
-    _safe_create_index(database[COLLECTIONS["ALERTS"]],
-                       [("level", ASCENDING), ("created_at", DESCENDING)])
-    # Alerts TTL — requires created_at to be a Date
-    try:
-        _safe_create_index(database[COLLECTIONS["ALERTS"]], "created_at", expireAfterSeconds=60 * 60 * 24 * 90)
-    except Exception as e:
-        logger.warning("TTL index for alerts not created: %s", e)
-
-    # Logs TTL
-    _safe_create_index(database[COLLECTIONS["LOGS"]], "created_at", expireAfterSeconds=60 * 60 * 24 * 30)
+def _connect_with_retries(uri: str) -> MongoClient:
+    """Try connecting to MongoDB with retry & backoff."""
+    last_exc = None
+    for attempt in range(1, CONNECT_RETRIES + 1):
+        try:
+            client = MongoClient(uri, serverSelectionTimeoutMS=5000)
+            client.admin.command("ping")
+            logger.info("✅ MongoDB connection established (attempt %d)", attempt)
+            return client
+        except (ServerSelectionTimeoutError, PyMongoError) as e:
+            last_exc = e
+            logger.warning("MongoDB connect failed (attempt %d/%d): %s",
+                           attempt, CONNECT_RETRIES, e)
+            time.sleep(CONNECT_BACKOFF_SEC * attempt)
+    logger.error("All MongoDB connection attempts failed after %d tries", CONNECT_RETRIES)
+    raise last_exc
 
 
 def init_db(app=None):
+    """Initialize global MongoDB client and DB. Attach to Flask app if provided."""
     global client, db
     uri = os.environ.get("MONGO_URI")
     if not uri:
         raise RuntimeError("MONGO_URI environment variable is missing")
 
-    try:
-        client = MongoClient(uri, serverSelectionTimeoutMS=5000)
-        client.admin.command("ping")
-        logger.info("MongoDB connection established")
-    except ServerSelectionTimeoutError as e:
-        logger.error("Could not connect to MongoDB: %s", e)
-        raise
+    client = _connect_with_retries(uri)
 
-    dbname = os.environ.get("MONGO_DBNAME")
-    if not dbname:
-        # be explicit in non-dev environments
-        if os.environ.get("FLASK_ENV") == "production":
-            raise RuntimeError("MONGO_DBNAME must be set in production")
-        dbname = "default_db"
-
+    dbname = os.environ.get("MONGO_DBNAME", "default_db")
     db = client[dbname]
 
     ensure_indexes(db)
@@ -91,31 +85,34 @@ def init_db(app=None):
     if app:
         app.mongo_client = client
         app.db = db
-        # register a teardown to close the client on app shutdown (Flask example)
-        try:
-            @app.teardown_appcontext
-            def _close_db(exception=None):
-                close_db()
-        except Exception:
-            # if app isn't Flask or doesn't support teardown_appcontext, ignore
-            pass
+
+        @app.teardown_appcontext
+        def _close_db(exception=None):
+            close_db()
 
     return db
 
+
 def get_collection(name: str):
+    """Get a collection by registry key or raw name."""
+    if db is None:
+        raise RuntimeError("Database not initialized. Call init_db() first.")
     if name in COLLECTIONS:
         return db[COLLECTIONS[name]]
     return db[name]
 
+
 def close_db():
     global client
     if client:
-        client.close()
-        logger.info("MongoDB client closed")
-        client = None
-# fallback for ad-hoc collections
-# Initialize immediately if module is imported directly
-
-
-if __name__ == "__main__":
-    init_db()  # for standalone scripts
+        try:
+            client.close()
+            logger.info("✅ MongoDB client closed.")
+        except Exception as e:
+            logger.error("Error closing MongoDB client: %s", e)
+        finally:
+            client = None
+    else:
+        logger.info("MongoDB client was already None.")
+    global db
+    db = None
