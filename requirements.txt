@@ -13,3 +13,4 @@ seaborn
 nltk
 firebase-admin
 twilio
+dotenv
