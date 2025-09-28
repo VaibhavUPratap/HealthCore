@@ -14,3 +14,4 @@ nltk
 firebase-admin
 twilio
 dotenv
+gunicorn
