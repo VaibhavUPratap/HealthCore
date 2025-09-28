@@ -3,78 +3,306 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HealthCore</title>
-  <link rel="stylesheet" href="gptstyle.css">
+  <title>HealthCore - Smart Health Surveillance</title>
+  <link rel="stylesheet" href="/SIH/static/css/login_style.css">
+  <link rel="icon" type="image/png" href="/static/images/logo.png">
 </head>
 <body>
+  <div class="background-animation"></div>
   <div class="container">
     <div class="welcome-box">
-      <h1>HealthCore</h1>
-      <p>Smart Health Surveillance App for Early detection and prevention of water-borne diseases</p>
+      <div class="header-container">
+        <img src="/static/images/logo.png" alt="HealthCore Logo" class="logo">
+        <h1>HealthCore</h1>
+      </div>
+      <p class="subtitle">Smart Health Surveillance App for Early detection and prevention of water-borne diseases</p>
 
       <!-- Step 1: Role Selection -->
       <div class="role-toggle">
-        <button id="userBtn" class="active">User</button>
-        <button id="ashaBtn">ASHA Worker</button>
+        <button id="userBtn" class="role-btn active">
+          <span class="role-icon">👤</span>
+          <span class="role-text">User</span>
+        </button>
+        <button id="ashaBtn" class="role-btn">
+          <span class="role-icon">🏥</span>
+          <span class="role-text">ASHA Worker</span>
+        </button>
       </div>
 
       <!-- Step 2: Login/Signup Toggle -->
       <div class="form-toggle">
-        <button id="loginBtn" class="active">Login</button>
-        <button id="signupBtn">Sign Up</button>
+        <button id="loginBtn" class="toggle-btn active">
+          <span>Login</span>
+        </button>
+        <button id="signupBtn" class="toggle-btn">
+          <span>Sign Up</span>
+        </button>
       </div>
 
       <!-- Login Form -->
       <form id="loginForm" class="form active">
-        <input type="email" placeholder="Email" required />
-        <input type="password" placeholder="Password" required />
-        <button type="submit">Login</button>
+        <div class="input-group">
+          <div class="input-icon">📧</div>
+          <input type="email" placeholder="Enter your email" required />
+          <div class="input-line"></div>
+        </div>
+        <div class="input-group">
+          <div class="input-icon">🔒</div>
+          <input type="password" placeholder="Enter your password" required />
+          <div class="input-line"></div>
+        </div>
+        <div class="form-options">
+          <label class="remember-me">
+            <input type="checkbox">
+            <span class="checkmark"></span>
+            Remember me
+          </label>
+          <a href="#" class="forgot-password">Forgot Password?</a>
+        </div>
+        <button type="submit" class="submit-btn">
+          <span class="btn-text">Login</span>
+          <span class="btn-icon">→</span>
+        </button>
       </form>
 
       <!-- Signup Form -->
       <form id="signupForm" class="form">
-        <input type="text" placeholder="Full Name" required />
-        <input type="email" placeholder="Email" required />
-        <input type="password" placeholder="Password" required />
-        <button type="submit">Sign Up</button>
+        <div class="input-group">
+          <div class="input-icon">👤</div>
+          <input type="text" placeholder="Full Name" required />
+          <div class="input-line"></div>
+        </div>
+        <div class="input-group">
+          <div class="input-icon">📧</div>
+          <input type="email" placeholder="Email Address" required />
+          <div class="input-line"></div>
+        </div>
+        <div class="input-group">
+          <div class="input-icon">🔒</div>
+          <input type="password" placeholder="Create Password" required />
+          <div class="input-line"></div>
+        </div>
+        <div class="form-options">
+          <label class="terms-agreement">
+            <input type="checkbox" required>
+            <span class="checkmark"></span>
+            I agree to the <a href="#">Terms & Conditions</a>
+          </label>
+        </div>
+        <button type="submit" class="submit-btn">
+          <span class="btn-text">Create Account</span>
+          <span class="btn-icon">✓</span>
+        </button>
       </form>
     </div>
   </div>
 
   <script>
-    // Role Toggle
-    const userBtn = document.getElementById("userBtn");
-    const ashaBtn = document.getElementById("ashaBtn");
+    // Enhanced JavaScript for better UX
+    document.addEventListener('DOMContentLoaded', function() {
+      // Role Toggle with smooth animations
+      const userBtn = document.getElementById("userBtn");
+      const ashaBtn = document.getElementById("ashaBtn");
 
-    userBtn.addEventListener("click", () => {
-      userBtn.classList.add("active");
-      ashaBtn.classList.remove("active");
-    });
+      function toggleRole(activeBtn, inactiveBtn) {
+        activeBtn.classList.add("active");
+        inactiveBtn.classList.remove("active");
+        
+        // Add ripple effect
+        createRipple(activeBtn);
+      }
 
-    ashaBtn.addEventListener("click", () => {
-      ashaBtn.classList.add("active");
-      userBtn.classList.remove("active");
-    });
+      userBtn.addEventListener("click", () => {
+        toggleRole(userBtn, ashaBtn);
+      });
 
-    // Login/Signup Toggle
-    const loginBtn = document.getElementById("loginBtn");
-    const signupBtn = document.getElementById("signupBtn");
-    const loginForm = document.getElementById("loginForm");
-    const signupForm = document.getElementById("signupForm");
+      ashaBtn.addEventListener("click", () => {
+        toggleRole(ashaBtn, userBtn);
+      });
 
-    loginBtn.addEventListener("click", () => {
-      loginForm.classList.add("active");
-      signupForm.classList.remove("active");
-      loginBtn.classList.add("active");
-      signupBtn.classList.remove("active");
-    });
+      // Login/Signup Toggle with smooth transitions
+      const loginBtn = document.getElementById("loginBtn");
+      const signupBtn = document.getElementById("signupBtn");
+      const loginForm = document.getElementById("loginForm");
+      const signupForm = document.getElementById("signupForm");
 
-    signupBtn.addEventListener("click", () => {
-      signupForm.classList.add("active");
-      loginForm.classList.remove("active");
-      signupBtn.classList.add("active");
-      loginBtn.classList.remove("active");
+      function toggleForm(activeBtn, inactiveBtn, activeForm, inactiveForm) {
+        // Remove active classes
+        [loginBtn, signupBtn].forEach(btn => btn.classList.remove("active"));
+        [loginForm, signupForm].forEach(form => form.classList.remove("active"));
+        
+        // Add active classes with animation
+        activeBtn.classList.add("active");
+        activeForm.classList.add("active");
+        
+        // Add ripple effect
+        createRipple(activeBtn);
+        
+        // Reset form inputs
+        resetForms();
+      }
+
+      loginBtn.addEventListener("click", () => {
+        toggleForm(loginBtn, signupBtn, loginForm, signupForm);
+      });
+
+      signupBtn.addEventListener("click", () => {
+        toggleForm(signupBtn, loginBtn, signupForm, loginForm);
+      });
+
+      // Enhanced form validation and submission
+      const forms = [loginForm, signupForm];
+      
+      forms.forEach(form => {
+        form.addEventListener("submit", function(e) {
+          e.preventDefault();
+          handleFormSubmission(this);
+        });
+
+        // Add real-time validation
+        const inputs = form.querySelectorAll('input[required]');
+        inputs.forEach(input => {
+          input.addEventListener('blur', validateInput);
+          input.addEventListener('input', clearValidation);
+        });
+      });
+
+      // Ripple effect for buttons
+      function createRipple(button) {
+        const ripple = document.createElement('span');
+        const rect = button.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        const x = rect.width / 2;
+        const y = rect.height / 2;
+        
+        ripple.style.width = ripple.style.height = size + 'px';
+        ripple.style.left = x - size / 2 + 'px';
+        ripple.style.top = y - size / 2 + 'px';
+        ripple.classList.add('ripple');
+        
+        button.appendChild(ripple);
+        
+        setTimeout(() => {
+          ripple.remove();
+        }, 600);
+      }
+
+      // Form validation
+      function validateInput(e) {
+        const input = e.target;
+        const inputGroup = input.closest('.input-group');
+        
+        if (input.checkValidity()) {
+          inputGroup.classList.add('valid');
+          inputGroup.classList.remove('invalid');
+        } else {
+          inputGroup.classList.add('invalid');
+          inputGroup.classList.remove('valid');
+        }
+      }
+
+      function clearValidation(e) {
+        const input = e.target;
+        const inputGroup = input.closest('.input-group');
+        inputGroup.classList.remove('invalid', 'valid');
+      }
+
+      // Form submission handling
+      function handleFormSubmission(form) {
+        const submitBtn = form.querySelector('.submit-btn');
+        const btnText = submitBtn.querySelector('.btn-text');
+        const btnIcon = submitBtn.querySelector('.btn-icon');
+        
+        // Add loading state
+        submitBtn.classList.add('loading');
+        btnText.textContent = form.id === 'loginForm' ? 'Signing In...' : 'Creating Account...';
+        btnIcon.textContent = '⏳';
+        
+        // Simulate API call (replace with actual implementation)
+        setTimeout(() => {
+          submitBtn.classList.remove('loading');
+          submitBtn.classList.add('success');
+          btnText.textContent = form.id === 'loginForm' ? 'Welcome Back!' : 'Account Created!';
+          btnIcon.textContent = '✓';
+          
+          // Reset after success animation
+          setTimeout(() => {
+            submitBtn.classList.remove('success');
+            btnText.textContent = form.id === 'loginForm' ? 'Login' : 'Create Account';
+            btnIcon.textContent = form.id === 'loginForm' ? '→' : '✓';
+            
+            // Here you would typically redirect or show success message
+            console.log(`${form.id} submitted successfully`);
+          }, 2000);
+        }, 1500);
+      }
+
+      // Reset forms
+      function resetForms() {
+        forms.forEach(form => {
+          form.reset();
+          const inputGroups = form.querySelectorAll('.input-group');
+          inputGroups.forEach(group => {
+            group.classList.remove('valid', 'invalid');
+          });
+        });
+      }
+
+      // Add keyboard navigation
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Tab') {
+          const activeElement = document.activeElement;
+          if (activeElement.classList.contains('role-btn') || activeElement.classList.contains('toggle-btn')) {
+            activeElement.style.outline = '2px solid var(--primary-color)';
+            activeElement.style.outlineOffset = '2px';
+          }
+        }
+      });
+
+      // Remove outline on click
+      document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('role-btn') || e.target.classList.contains('toggle-btn')) {
+          e.target.style.outline = 'none';
+        }
+      });
     });
   </script>
+
+  <style>
+    /* Ripple effect styles */
+    .ripple {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      transform: scale(0);
+      animation: ripple-animation 0.6s linear;
+      pointer-events: none;
+    }
+
+    @keyframes ripple-animation {
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
+    }
+
+    /* Input validation styles */
+    .input-group.valid {
+      border-color: var(--accent-color);
+      background: rgba(102, 187, 106, 0.05);
+    }
+
+    .input-group.invalid {
+      border-color: #e74c3c;
+      background: rgba(231, 76, 60, 0.05);
+      animation: shake 0.5s ease-in-out;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+  </style>
 </body>
 </html>
