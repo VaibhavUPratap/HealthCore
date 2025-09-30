@@ -24,6 +24,10 @@ def create_app():
     @app.route("/alerts")
     def alerts_page():
         return render_template("alerts.html")
+    
+    @app.route("/text-comparison")
+    def text_comparison():
+        return render_template("text-comparison.html")
 
 
     @app.errorhandler(404)
@@ -38,4 +42,4 @@ def create_app():
 
 if __name__ == "__main__":
     app = create_app()
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5002, debug=True)

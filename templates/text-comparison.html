@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% block title %}Text Comparison - HealthCore{% endblock %}
+{% block content %}
+<div class="min-h-screen bg-muted/30 py-8">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h1 class="text-4xl font-bold text-center mb-12 text-primary">Text Color & Alignment Comparison</h1>
+    
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <!-- Before -->
+      <div class="bg-card rounded-2xl shadow-xl border p-8">
+        <h2 class="text-2xl font-bold mb-6 text-primary">BEFORE (Original)</h2>
+        <div class="space-y-4">
+          <h3 class="text-xl font-semibold text-gray-700">Regular Heading</h3>
+          <p class="text-gray-600">This is regular paragraph text with default styling. The colors are subtle and may not be very visible.</p>
+          <div class="bg-gray-100 p-4 rounded-lg">
+            <h4 class="text-lg font-medium text-gray-800">Card Content</h4>
+            <p class="text-gray-600">Card text with muted colors that might be hard to read.</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- After -->
+      <div class="bg-card rounded-2xl shadow-xl border p-8">
+        <h2 class="text-2xl font-bold mb-6 text-primary">AFTER (Enhanced)</h2>
+        <div class="space-y-4 text-dramatic">
+          <h3 class="text-xl font-semibold">Enhanced Heading</h3>
+          <p>This is enhanced paragraph text with dramatic styling. The colors are bold and highly visible with borders and shadows.</p>
+          <div class="bg-gradient-to-r from-primary/10 to-accent/10 p-4 rounded-lg border-2 border-accent">
+            <h4 class="text-lg font-medium">Enhanced Card Content</h4>
+            <p>Enhanced card text with high contrast and dramatic styling for better visibility.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Detailed Comparison -->
+    <div class="mt-12 bg-card rounded-2xl shadow-xl border p-8">
+      <h2 class="text-3xl font-bold text-center mb-8 text-primary">Detailed Text Styling Comparison</h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Original -->
+        <div class="text-center">
+          <h3 class="text-xl font-semibold mb-4 text-gray-700">Original</h3>
+          <div class="bg-gray-50 p-6 rounded-lg">
+            <h4 class="text-lg font-medium text-gray-800 mb-2">Sample Heading</h4>
+            <p class="text-gray-600">Sample paragraph text with default colors and styling.</p>
+          </div>
+        </div>
+        
+        <!-- High Contrast -->
+        <div class="text-center">
+          <h3 class="text-xl font-semibold mb-4 text-primary">High Contrast</h3>
+          <div class="bg-card p-6 rounded-lg text-high-contrast">
+            <h4 class="text-lg font-medium mb-2">Sample Heading</h4>
+            <p>Sample paragraph text with high contrast colors and shadows.</p>
+          </div>
+        </div>
+        
+        <!-- Dramatic -->
+        <div class="text-center">
+          <h3 class="text-xl font-semibold mb-4 text-primary">Dramatic</h3>
+          <div class="bg-card p-6 rounded-lg text-dramatic">
+            <h4 class="text-lg font-medium mb-2">Sample Heading</h4>
+            <p>Sample paragraph text with dramatic borders and backgrounds.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Color Palette -->
+    <div class="mt-12 bg-card rounded-2xl shadow-xl border p-8">
+      <h2 class="text-3xl font-bold text-center mb-8 text-primary">Enhanced Color Palette</h2>
+      
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="text-center">
+          <div class="w-16 h-16 bg-primary rounded-lg mx-auto mb-2"></div>
+          <p class="text-sm font-medium text-primary">Primary</p>
+        </div>
+        <div class="text-center">
+          <div class="w-16 h-16 bg-accent rounded-lg mx-auto mb-2"></div>
+          <p class="text-sm font-medium text-accent">Accent</p>
+        </div>
+        <div class="text-center">
+          <div class="w-16 h-16 bg-success rounded-lg mx-auto mb-2"></div>
+          <p class="text-sm font-medium text-success">Success</p>
+        </div>
+        <div class="text-center">
+          <div class="w-16 h-16 bg-warning rounded-lg mx-auto mb-2"></div>
+          <p class="text-sm font-medium text-warning">Warning</p>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Navigation -->
+    <div class="mt-12 text-center">
+      <a href="/" class="inline-flex items-center px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors">
+        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+        </svg>
+        Back to Home
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}
+

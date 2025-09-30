@@ -7,7 +7,8 @@ from pymongo import MongoClient, ASCENDING, DESCENDING
 from pymongo.errors import ServerSelectionTimeoutError, PyMongoError
 from dotenv import load_dotenv
 
-load_dotenv()
+# Load the main .env file explicitly to avoid conflicts with database/.env
+load_dotenv(os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env'))
 logger = logging.getLogger(__name__)
 
 # Globals

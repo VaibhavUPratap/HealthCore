@@ -51,3 +51,4 @@ timestamp,reporter,symptoms,cases,turbidity,ph,chlorine,lat,lng,location_name,td
 2025-09-27T20:54:10.153942,Dr. Kavita Joshi,No symptoms reported,0,5.2,7.9,2.0,13.078404141884604,80.27997876761526,Chennai Marina,934.0,0.62,11.3,63.6,539.0,Low Risk,0.82
 2025-09-27T21:02:23.087466,Test User Final,,15,,6.5,,19.076,72.8777,Test Location Final,800.0,1.2,20.0,120.0,1000.0,Medium Risk,0.84
 2025-09-27T21:05:28.508044,Vaibhav,fever,10,0.2,7.4,0.2,12.660534,77.455333,Bengalore ,414.0,0.35,13.0,50.0,643.0,Medium Risk,0.99
+2025-09-29T16:38:06.733857,,,,,,,,,,,,,,,,
