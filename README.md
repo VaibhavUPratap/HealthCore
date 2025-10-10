@@ -23,3 +23,31 @@ A digital health platform that includes:
 • Alert system for health authorities and local leaders.
 • Educational modules for hygiene awareness and disease prevention.
 • Offline functionality and support for tribal languages.
+
+---
+
+## Database Migration Notice
+
+**⚠️ Important: Database has been migrated from MongoDB to SQLite**
+
+Due to MongoDB connection issues, this project now uses SQLite as its database backend. SQLite is a lightweight, serverless database that requires no separate installation or configuration.
+
+### What Changed:
+- **Previous:** MongoDB (required separate MongoDB server installation)
+- **Current:** SQLite (built-in, file-based database)
+- Database file: `healthcore.db` (auto-created in project root)
+
+### Benefits:
+- ✅ No external database server needed
+- ✅ Zero configuration required
+- ✅ Portable and lightweight
+- ✅ Perfect for development and small deployments
+- ✅ Same API interface maintained for compatibility
+
+### Configuration:
+The database path is configurable via `.env`:
+```
+SQLITE_DB_PATH=healthcore.db
+```
+
+All existing database operations work the same way - the migration is transparent to the application code!

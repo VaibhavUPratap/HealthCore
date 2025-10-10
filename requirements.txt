@@ -1,6 +1,4 @@
 Flask
-Flask-PyMongo
-pymongo
 scikit-learn
 pandas
 numpy
@@ -8,10 +6,9 @@ joblib
 gunicorn
 requests
 flask-cors
+python-dotenv
 matplotlib
 seaborn
 nltk
 firebase-admin
 twilio
-dotenv
-gunicorn

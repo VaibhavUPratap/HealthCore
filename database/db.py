@@ -1,125 +1,56 @@
 # database/db.py
+# This module now uses SQLite instead of MongoDB
 import os
-import time
 import logging
 from typing import Optional
-from pymongo import MongoClient, ASCENDING, DESCENDING
-from pymongo.errors import ServerSelectionTimeoutError, PyMongoError
 from dotenv import load_dotenv
+
+# Import from SQLite module
+from .sqlite_db import (
+    init_db as sqlite_init_db,
+    get_collection as sqlite_get_collection,
+    close_db as sqlite_close_db,
+    COLLECTIONS,
+    mongo as sqlite_mongo
+)
 
 # Load the main .env file explicitly to avoid conflicts with database/.env
 load_dotenv(os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env'))
 logger = logging.getLogger(__name__)
 
-# Globals
-client: Optional[MongoClient] = None
+# Globals - for compatibility
+client: Optional[any] = None
 db = None
-
-# Collection registry
-COLLECTIONS = {
-    "USERS": "users",
-    "DATASETS": "datasets",
-    "PREDICTIONS": "predictions",
-    "REPORTS": "reports",
-    "ALERTS": "alerts",
-    "LOGS": "logs",
-    "SESSIONS": "sessions",
-}
-
-# Retry controls
-CONNECT_RETRIES = int(os.environ.get("MONGO_CONNECT_RETRIES", "3"))
-CONNECT_BACKOFF_SEC = float(os.environ.get("MONGO_CONNECT_BACKOFF_SEC", "1.0"))
 
 
 def ensure_indexes(database):
-    """Create helpful indexes (idempotent)."""
-    database[COLLECTIONS["USERS"]].create_index("email", unique=True)
-    database[COLLECTIONS["DATASETS"]].create_index(
-        [("location_name", ASCENDING), ("timestamp", DESCENDING)]
-    )
-    database[COLLECTIONS["PREDICTIONS"]].create_index("created_at")
-    database[COLLECTIONS["REPORTS"]].create_index([("created_at", DESCENDING)])
-    database[COLLECTIONS["ALERTS"]].create_index(
-        [("level", ASCENDING), ("created_at", DESCENDING)]
-    )
-    # TTL cleanup
-    database[COLLECTIONS["ALERTS"]].create_index(
-        "created_at", expireAfterSeconds=60 * 60 * 24 * 90
-    )
-    database[COLLECTIONS["LOGS"]].create_index(
-        "created_at", expireAfterSeconds=60 * 60 * 24 * 30
-    )
+    """Create helpful indexes (idempotent) - stub for SQLite compatibility."""
+    # Indexes are already created in SQLite schema
+    # This function is kept for compatibility
+    pass
 
 
-def _connect_with_retries(uri: str) -> MongoClient:
-    """Try connecting to MongoDB with retry & backoff."""
-    last_exc = None
-    for attempt in range(1, CONNECT_RETRIES + 1):
-        try:
-            client = MongoClient(uri, serverSelectionTimeoutMS=5000)
-            client.admin.command("ping")
-            logger.info("✅ MongoDB connection established (attempt %d)", attempt)
-            return client
-        except (ServerSelectionTimeoutError, PyMongoError) as e:
-            last_exc = e
-            logger.warning("MongoDB connect failed (attempt %d/%d): %s",
-                           attempt, CONNECT_RETRIES, e)
-            time.sleep(CONNECT_BACKOFF_SEC * attempt)
-    logger.error("All MongoDB connection attempts failed after %d tries", CONNECT_RETRIES)
-    raise last_exc
+# Removed MongoDB connection logic - using SQLite now
 
 
 def init_db(app=None):
-    """Initialize global MongoDB client and DB. Attach to Flask app if provided."""
-    global client, db
-    uri = os.environ.get("MONGO_URI")
-    if not uri:
-        raise RuntimeError("MONGO_URI environment variable is missing")
-
-    client = _connect_with_retries(uri)
-
-    dbname = os.environ.get("MONGO_DBNAME", "default_db")
-    db = client[dbname]
-
-    ensure_indexes(db)
-
-    if app:
-        app.mongo_client = client
-        app.db = db
-
-        @app.teardown_appcontext
-        def _close_db(exception=None):
-            close_db()
-
+    """Initialize database. Now uses SQLite instead of MongoDB."""
+    global db
+    logger.info("🔄 Initializing SQLite database (MongoDB alternative)")
+    db = sqlite_init_db(app)
     return db
 
 
 def get_collection(name: str):
-    """Get a collection by registry key or raw name."""
-    if db is None:
-        raise RuntimeError("Database not initialized. Call init_db() first.")
-    if name in COLLECTIONS:
-        return db[COLLECTIONS[name]]
-    return db[name]
+    """Get a collection (table) by registry key or raw name."""
+    return sqlite_get_collection(name)
 
 
 def close_db():
-    global client
-    if client:
-        try:
-            client.close()
-            logger.info("✅ MongoDB client closed.")
-        except Exception as e:
-            logger.error("Error closing MongoDB client: %s", e)
-        finally:
-            client = None
-    else:
-        logger.info("MongoDB client was already None.")
+    """Close database connection."""
+    sqlite_close_db()
     global db
     db = None
 
-class _MongoCompat:
-    def __init__(self, db):
-        self.db = db
-
-mongo = _MongoCompat(db)
+# Use the SQLite mongo compatibility wrapper
+mongo = sqlite_mongo
