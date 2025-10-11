@@ -1,5 +1,5 @@
 const appt = document.getElementById("appointmentBtn");
-if (appt) appt.addEventListener("click", () => alert("Thank you! Appointment feature coming soon 🚀"));
+if (appt) appt.addEventListener("click", () => alert("Appointment feature coming soon — we'll notify you when it's ready. 🚀"));
 
 // Activate current nav link
 document.querySelectorAll('.nav-links a').forEach(a => {
@@ -22,10 +22,7 @@ if ('serviceWorker' in navigator) {
   // Initialize theme
   function initTheme() {
     const saved = localStorage.getItem(key);
-    const systemTheme = getSystemTheme();
-    const theme = saved || systemTheme;
-    
-    console.log('Initializing theme:', theme, 'saved:', saved, 'system:', systemTheme);
+    const theme = saved || getSystemTheme();
     
     if (theme === 'dark') {
       root.classList.add('dark');
@@ -44,61 +41,71 @@ if ('serviceWorker' in navigator) {
     const sunIcon = document.getElementById('sunIcon');
     const moonIcon = document.getElementById('moonIcon');
     
-    console.log('Updating theme UI, isDark:', isDark);
-    
+    // Show the CURRENT active mode
     if (themeText) {
-      themeText.textContent = isDark ? 'Light mode' : 'Dark mode';
+      themeText.textContent = isDark ? 'Dark mode' : 'Light mode';
     }
+    // Sun visible in light mode, moon visible in dark mode
     if (sunIcon) {
-      sunIcon.classList.toggle('hidden', !isDark);
-      sunIcon.classList.toggle('block', isDark);
+      sunIcon.classList.toggle('hidden', isDark);    // hide sun when dark
+      sunIcon.classList.toggle('block', !isDark);
     }
     if (moonIcon) {
-      moonIcon.classList.toggle('hidden', isDark);
-      moonIcon.classList.toggle('block', !isDark);
+      moonIcon.classList.toggle('hidden', !isDark); // hide moon when light
+      moonIcon.classList.toggle('block', isDark);
     }
   }
   
   // Toggle theme
   function toggleTheme() {
-    const isDark = root.classList.contains('dark');
-    const newTheme = isDark ? 'light' : 'dark';
+    const current = root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+    const next = current === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    if (next === 'dark') root.classList.add('dark'); else root.classList.remove('dark');
+    localStorage.setItem(key, next);
+    updateThemeUI(next === 'dark');
     
-    console.log('Toggling theme from', isDark ? 'dark' : 'light', 'to', newTheme);
-    
-    root.classList.toggle('dark');
-    root.setAttribute('data-theme', newTheme);
-    localStorage.setItem(key, newTheme);
-    updateThemeUI(!isDark);
-    
-    // Add a subtle animation effect
+    // subtle animation effect
     root.style.transition = 'all 0.3s ease';
-    setTimeout(() => {
-      root.style.transition = '';
-    }, 300);
+    setTimeout(() => { root.style.transition = ''; }, 300);
   }
   
-  // Listen for system theme changes
+  // Listen for system theme changes if user hasn't chosen explicitly
   window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
     if (!localStorage.getItem(key)) {
       initTheme();
     }
   });
   
-  // Wait for DOM to be ready
+  // Wait for DOM to be ready and initialize
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initTheme);
   } else {
     initTheme();
   }
   
-  // Add click listener
+  // Add click listener and mobile menu wiring after DOM ready
   document.addEventListener('DOMContentLoaded', function() {
     const btn = document.getElementById('themeToggle');
-    console.log('Theme toggle button found:', btn);
     if (btn) {
       btn.addEventListener('click', toggleTheme);
-      console.log('Theme toggle listener added');
+    }
+
+    // Mobile menu toggle wiring
+    const mobileBtn = document.getElementById('mobileMenuBtn');
+    const navLinks = document.querySelector('.nav-links');
+    if (mobileBtn && navLinks) {
+      mobileBtn.addEventListener('click', () => {
+        navLinks.classList.toggle('open'); // CSS controls visibility for .open
+        const expanded = navLinks.classList.contains('open');
+        mobileBtn.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+      });
+    }
+
+    // Populate footer year if present
+    const footerYear = document.getElementById('footerYear');
+    if (footerYear) {
+      footerYear.textContent = new Date().getFullYear();
     }
   });
 })();
@@ -144,8 +151,8 @@ if ('serviceWorker' in navigator) {
         <div class="flex-1">
           <p class="text-sm font-medium">${message}</p>
         </div>
-        <button onclick="this.parentElement.parentElement.remove()" class="ml-4 text-white hover:text-gray-200">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <button onclick="this.parentElement.parentElement.remove()" class="ml-4 text-white hover:text-gray-200" aria-label="Close notification">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
           </svg>
         </button>
@@ -193,6 +200,7 @@ if ('serviceWorker' in navigator) {
   // Enhanced button interactions
   function enhanceButtons() {
     document.querySelectorAll('button, .btn').forEach(button => {
+      // Add pointer-friendly handlers only if device supports hover
       button.addEventListener('mouseenter', function() {
         this.style.transform = 'translateY(-2px)';
         this.style.boxShadow = '0 10px 25px -5px rgba(0, 0, 0, 0.1)';
