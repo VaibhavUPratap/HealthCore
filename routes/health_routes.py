@@ -333,8 +333,14 @@ def alerts():
             risk = compute_risk(r.get("cases"), r.get("turbidity"))
         
         # Convert AI risk levels to simple format for alerts
-        if risk in ("Medium Risk", "High Risk", "Medium", "High"):
-            alert_risk = "Medium" if risk in ("Medium Risk", "Medium") else "High"
+        if risk in ("Low Risk", "Medium Risk", "High Risk", "Low", "Medium", "High"):
+            if risk in ("Low Risk", "Low"):
+                alert_risk = "Low"
+            elif risk in ("Medium Risk", "Medium"):
+                alert_risk = "Medium"
+            else:
+                alert_risk = "High"
+            
             alerts_out.append({
                 "timestamp": r.get("timestamp"),
                 "message": f"{alert_risk} Risk Alert",
@@ -345,6 +351,7 @@ def alerts():
                 "details": ", ".join(filter(None, [
                     f"cases={r['cases']}" if r.get("cases") is not None else None,
                     f"turbidity={r['turbidity']}" if r.get("turbidity") is not None else None,
+                    f"pH={r['ph']}" if r.get("ph") is not None else None,
                     f"AI Confidence: {int(r['ai_confidence']*100)}%" if r.get("ai_confidence") else None,
                 ]))
             })

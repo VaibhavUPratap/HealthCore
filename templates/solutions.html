@@ -1,0 +1,732 @@
+{% extends 'base.html' %}
+{% block title %}Solutions - HealthCore{% endblock %}
+{% block content %}
+  <div class="min-h-screen bg-muted/30">
+    <!-- Header -->
+    <div class="bg-gradient-to-r from-card via-card to-card/80 shadow-xl border-b relative overflow-hidden">
+      <!-- Background decoration -->
+      <div class="absolute inset-0 bg-grid-pattern opacity-5"></div>
+      <div class="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl"></div>
+      <div class="absolute bottom-0 left-0 w-96 h-96 bg-accent/5 rounded-full blur-3xl"></div>
+      
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between animate-fade-in text-dramatic">
+          <div>
+            <div class="inline-flex items-center rounded-full border px-4 py-2 text-sm bg-background/80 backdrop-blur-sm mb-6 shadow-lg">
+              <div class="h-2 w-2 rounded-full bg-primary mr-3 animate-pulse-slow"></div>
+              <span class="font-medium" data-i18n="solutions.subtitle">AI-Powered Preventive Solutions</span>
+            </div>
+            <h1 class="text-5xl sm:text-6xl font-bold text-primary mb-4 text-shadow-lg">
+              <span class="text-accent font-extrabold" data-i18n="solutions.title">Health</span> <span data-i18n="solutions.title2">Solutions</span>
+            </h1>
+            <p class="text-xl text-secondary max-w-2xl leading-relaxed text-semibold" data-i18n="solutions.description">
+              Comprehensive preventive measures and solutions for waterborne diseases based on AI risk analysis
+            </p>
+          </div>
+          <div class="mt-8 sm:mt-0 flex flex-col sm:flex-row gap-4">
+            <!-- Language Selector -->
+            <select id="languageSelector" class="flex h-12 w-full sm:w-[180px] rounded-xl border-2 border-primary/20 bg-background/80 backdrop-blur-sm px-4 py-3 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 hover:border-primary/40 transition-all duration-300 shadow-lg">
+              <option value="en">English</option>
+              <option value="hi">हिन्दी</option>
+              <option value="ta">தமிழ்</option>
+              <option value="te">తెలుగు</option>
+              <option value="bn">বাংলা</option>
+              <option value="gu">ગુજરાતી</option>
+              <option value="mr">मराठी</option>
+              <option value="kn">ಕನ್ನಡ</option>
+            </select>
+            <!-- Risk Level Filter -->
+            <select id="riskFilter" class="flex h-12 w-full sm:w-[220px] rounded-xl border-2 border-primary/20 bg-background/80 backdrop-blur-sm px-4 py-3 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 hover:border-primary/40 transition-all duration-300 shadow-lg">
+              <option value="all" data-i18n="solutions.filter.all">All Risk Levels</option>
+              <option value="high" data-i18n="solutions.filter.high">High Risk</option>
+              <option value="medium" data-i18n="solutions.filter.medium">Medium Risk</option>
+              <option value="low" data-i18n="solutions.filter.low">Low Risk</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Risk Assessment Section -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+        <!-- Risk Assessment Card -->
+        <div class="lg:col-span-1">
+          <div class="bg-card rounded-2xl shadow-xl border p-6 animate-slide-up">
+            <div class="flex items-center space-x-3 mb-6">
+              <div class="h-10 w-10 rounded-xl bg-gradient-to-r from-primary/20 to-primary/10 flex items-center justify-center">
+                <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                </svg>
+              </div>
+              <h3 class="text-lg font-semibold text-foreground" data-i18n="solutions.assessment.title">Risk Assessment</h3>
+            </div>
+            <div id="riskAssessment" class="space-y-4">
+              <div class="text-center text-muted-foreground" data-i18n="solutions.assessment.loading">Loading current risk data...</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="lg:col-span-2">
+          <div class="bg-card rounded-2xl shadow-xl border p-6 animate-slide-up" style="animation-delay: 0.1s">
+            <div class="flex items-center space-x-3 mb-6">
+              <div class="h-10 w-10 rounded-xl bg-gradient-to-r from-accent/20 to-accent/10 flex items-center justify-center">
+                <svg class="w-5 h-5 text-accent-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                </svg>
+              </div>
+              <h3 class="text-lg font-semibold text-foreground" data-i18n="solutions.actions.title">Quick Actions</h3>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <button onclick="showPreventiveMeasures('high')" class="group p-4 rounded-xl border-2 border-red-200 bg-red-50 hover:bg-red-100 transition-all duration-300 hover:scale-105">
+                <div class="flex items-center space-x-3">
+                  <div class="h-8 w-8 rounded-lg bg-red-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <svg class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                    </svg>
+                  </div>
+                  <div class="text-left">
+                    <h4 class="font-semibold text-red-800" data-i18n="solutions.actions.high">High Risk Solutions</h4>
+                    <p class="text-sm text-red-600" data-i18n="solutions.actions.high.desc">Immediate action required</p>
+                  </div>
+                </div>
+              </button>
+              <button onclick="showPreventiveMeasures('medium')" class="group p-4 rounded-xl border-2 border-yellow-200 bg-yellow-50 hover:bg-yellow-100 transition-all duration-300 hover:scale-105">
+                <div class="flex items-center space-x-3">
+                  <div class="h-8 w-8 rounded-lg bg-yellow-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <svg class="w-4 h-4 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                    </svg>
+                  </div>
+                  <div class="text-left">
+                    <h4 class="font-semibold text-yellow-800" data-i18n="solutions.actions.medium">Medium Risk Solutions</h4>
+                    <p class="text-sm text-yellow-600" data-i18n="solutions.actions.medium.desc">Preventive measures needed</p>
+                  </div>
+                </div>
+              </button>
+              <button onclick="showPreventiveMeasures('low')" class="group p-4 rounded-xl border-2 border-green-200 bg-green-50 hover:bg-green-100 transition-all duration-300 hover:scale-105">
+                <div class="flex items-center space-x-3">
+                  <div class="h-8 w-8 rounded-lg bg-green-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                  </div>
+                  <div class="text-left">
+                    <h4 class="font-semibold text-green-800" data-i18n="solutions.actions.low">Low Risk Solutions</h4>
+                    <p class="text-sm text-green-600" data-i18n="solutions.actions.low.desc">Maintenance and monitoring</p>
+                  </div>
+                </div>
+              </button>
+              <button onclick="showPreventiveMeasures('general')" class="group p-4 rounded-xl border-2 border-blue-200 bg-blue-50 hover:bg-blue-100 transition-all duration-300 hover:scale-105">
+                <div class="flex items-center space-x-3">
+                  <div class="h-8 w-8 rounded-lg bg-blue-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                    </svg>
+                  </div>
+                  <div class="text-left">
+                    <h4 class="font-semibold text-blue-800" data-i18n="solutions.actions.general">General Prevention</h4>
+                    <p class="text-sm text-blue-600" data-i18n="solutions.actions.general.desc">Best practices for all</p>
+                  </div>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Preventive Measures Section -->
+      <div id="preventiveMeasures" class="space-y-8">
+        <!-- Content will be dynamically loaded based on risk level -->
+      </div>
+
+      <!-- Water Quality Parameters Guide -->
+      <div class="mt-16 bg-card rounded-2xl shadow-xl border p-8 animate-slide-up">
+        <div class="flex items-center space-x-3 mb-8">
+          <div class="h-12 w-12 rounded-xl bg-gradient-to-r from-green-500/20 to-green-500/10 flex items-center justify-center">
+            <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          </div>
+          <div>
+            <h3 class="text-2xl font-bold text-foreground" data-i18n="solutions.parameters.title">Water Quality Parameters Guide</h3>
+            <p class="text-muted-foreground" data-i18n="solutions.parameters.description">Understanding key water quality indicators and their safe ranges</p>
+          </div>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- pH -->
+          <div class="group p-6 rounded-xl border border-primary/10 hover:border-primary/30 transition-all duration-300 hover:scale-105">
+            <div class="flex items-center space-x-3 mb-4">
+              <div class="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path>
+                </svg>
+              </div>
+              <h4 class="font-semibold text-foreground">pH Level</h4>
+            </div>
+            <div class="space-y-2">
+              <div class="flex justify-between text-sm">
+                <span class="text-muted-foreground" data-i18n="solutions.parameters.ph.optimal">Optimal Range:</span>
+                <span class="font-medium text-green-600">6.5 - 8.5</span>
+              </div>
+              <div class="flex justify-between text-sm">
+                <span class="text-muted-foreground" data-i18n="solutions.parameters.ph.unit">Unit:</span>
+                <span class="font-medium">pH units</span>
+              </div>
+              <p class="text-sm text-muted-foreground" data-i18n="solutions.parameters.ph.description">Measures acidity/alkalinity. Outside range can cause health issues.</p>
+            </div>
+          </div>
+
+          <!-- Turbidity -->
+          <div class="group p-6 rounded-xl border border-accent/10 hover:border-accent/30 transition-all duration-300 hover:scale-105">
+            <div class="flex items-center space-x-3 mb-4">
+              <div class="h-10 w-10 rounded-lg bg-accent/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                <svg class="w-5 h-5 text-accent-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                </svg>
+              </div>
+              <h4 class="font-semibold text-foreground">Turbidity</h4>
+            </div>
+            <div class="space-y-2">
+              <div class="flex justify-between text-sm">
+                <span class="text-muted-foreground" data-i18n="solutions.parameters.turbidity.optimal">Safe Range:</span>
+                <span class="font-medium text-green-600">&lt; 5 NTU</span>
+              </div>
+              <div class="flex justify-between text-sm">
+                <span class="text-muted-foreground" data-i18n="solutions.parameters.turbidity.unit">Unit:</span>
+                <span class="font-medium">NTU</span>
+              </div>
+              <p class="text-sm text-muted-foreground" data-i18n="solutions.parameters.turbidity.description">Measures water clarity. High turbidity indicates contamination.</p>
+            </div>
+          </div>
+
+          <!-- TDS -->
+          <div class="group p-6 rounded-xl border border-green-500/10 hover:border-green-500/30 transition-all duration-300 hover:scale-105">
+            <div class="flex items-center space-x-3 mb-4">
+              <div class="h-10 w-10 rounded-lg bg-green-500/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path>
+                </svg>
+              </div>
+              <h4 class="font-semibold text-foreground">TDS</h4>
+            </div>
+            <div class="space-y-2">
+              <div class="flex justify-between text-sm">
+                <span class="text-muted-foreground" data-i18n="solutions.parameters.tds.optimal">Acceptable:</span>
+                <span class="font-medium text-green-600">&lt; 500 mg/L</span>
+              </div>
+              <div class="flex justify-between text-sm">
+                <span class="text-muted-foreground" data-i18n="solutions.parameters.tds.unit">Unit:</span>
+                <span class="font-medium">mg/L</span>
+              </div>
+              <p class="text-sm text-muted-foreground" data-i18n="solutions.parameters.tds.description">Total dissolved solids. High levels affect taste and health.</p>
+            </div>
+          </div>
+
+          <!-- Chlorine -->
+          <div class="group p-6 rounded-xl border border-blue-500/10 hover:border-blue-500/30 transition-all duration-300 hover:scale-105">
+            <div class="flex items-center space-x-3 mb-4">
+              <div class="h-10 w-10 rounded-lg bg-blue-500/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                </svg>
+              </div>
+              <h4 class="font-semibold text-foreground">Chlorine</h4>
+            </div>
+            <div class="space-y-2">
+              <div class="flex justify-between text-sm">
+                <span class="text-muted-foreground" data-i18n="solutions.parameters.chlorine.optimal">Safe Range:</span>
+                <span class="font-medium text-green-600">0.2 - 4 mg/L</span>
+              </div>
+              <div class="flex justify-between text-sm">
+                <span class="text-muted-foreground" data-i18n="solutions.parameters.chlorine.unit">Unit:</span>
+                <span class="font-medium">mg/L</span>
+              </div>
+              <p class="text-sm text-muted-foreground" data-i18n="solutions.parameters.chlorine.description">Disinfectant level. Too low allows bacteria; too high is harmful.</p>
+            </div>
+          </div>
+
+          <!-- Fluoride -->
+          <div class="group p-6 rounded-xl border border-purple-500/10 hover:border-purple-500/30 transition-all duration-300 hover:scale-105">
+            <div class="flex items-center space-x-3 mb-4">
+              <div class="h-10 w-10 rounded-lg bg-purple-500/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                </svg>
+              </div>
+              <h4 class="font-semibold text-foreground">Fluoride</h4>
+            </div>
+            <div class="space-y-2">
+              <div class="flex justify-between text-sm">
+                <span class="text-muted-foreground" data-i18n="solutions.parameters.fluoride.optimal">Optimal:</span>
+                <span class="font-medium text-green-600">0.7 - 1.2 mg/L</span>
+              </div>
+              <div class="flex justify-between text-sm">
+                <span class="text-muted-foreground" data-i18n="solutions.parameters.fluoride.unit">Unit:</span>
+                <span class="font-medium">mg/L</span>
+              </div>
+              <p class="text-sm text-muted-foreground" data-i18n="solutions.parameters.fluoride.description">Prevents tooth decay. Excess causes fluorosis.</p>
+            </div>
+          </div>
+
+          <!-- Nitrate -->
+          <div class="group p-6 rounded-xl border border-orange-500/10 hover:border-orange-500/30 transition-all duration-300 hover:scale-105">
+            <div class="flex items-center space-x-3 mb-4">
+              <div class="h-10 w-10 rounded-lg bg-orange-500/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                <svg class="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                </svg>
+              </div>
+              <h4 class="font-semibold text-foreground">Nitrate</h4>
+            </div>
+            <div class="space-y-2">
+              <div class="flex justify-between text-sm">
+                <span class="text-muted-foreground" data-i18n="solutions.parameters.nitrate.optimal">Safe Limit:</span>
+                <span class="font-medium text-green-600">&lt; 45 mg/L</span>
+              </div>
+              <div class="flex justify-between text-sm">
+                <span class="text-muted-foreground" data-i18n="solutions.parameters.nitrate.unit">Unit:</span>
+                <span class="font-medium">mg/L</span>
+              </div>
+              <p class="text-sm text-muted-foreground" data-i18n="solutions.parameters.nitrate.description">From fertilizers/sewage. High levels cause methemoglobinemia.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  // Internationalization data
+  const i18nData = {
+    en: {
+      'solutions.subtitle': 'AI-Powered Preventive Solutions',
+      'solutions.title': 'Health',
+      'solutions.title2': 'Solutions',
+      'solutions.description': 'Comprehensive preventive measures and solutions for waterborne diseases based on AI risk analysis',
+      'solutions.filter.all': 'All Risk Levels',
+      'solutions.filter.high': 'High Risk',
+      'solutions.filter.medium': 'Medium Risk',
+      'solutions.filter.low': 'Low Risk',
+      'solutions.assessment.title': 'Risk Assessment',
+      'solutions.assessment.loading': 'Loading current risk data...',
+      'solutions.actions.title': 'Quick Actions',
+      'solutions.actions.high': 'High Risk Solutions',
+      'solutions.actions.high.desc': 'Immediate action required',
+      'solutions.actions.medium': 'Medium Risk Solutions',
+      'solutions.actions.medium.desc': 'Preventive measures needed',
+      'solutions.actions.low': 'Low Risk Solutions',
+      'solutions.actions.low.desc': 'Maintenance and monitoring',
+      'solutions.actions.general': 'General Prevention',
+      'solutions.actions.general.desc': 'Best practices for all',
+      'solutions.parameters.title': 'Water Quality Parameters Guide',
+      'solutions.parameters.description': 'Understanding key water quality indicators and their safe ranges',
+      'solutions.parameters.ph.optimal': 'Optimal Range:',
+      'solutions.parameters.ph.unit': 'Unit:',
+      'solutions.parameters.ph.description': 'Measures acidity/alkalinity. Outside range can cause health issues.',
+      'solutions.parameters.turbidity.optimal': 'Safe Range:',
+      'solutions.parameters.turbidity.unit': 'Unit:',
+      'solutions.parameters.turbidity.description': 'Measures water clarity. High turbidity indicates contamination.',
+      'solutions.parameters.tds.optimal': 'Acceptable:',
+      'solutions.parameters.tds.unit': 'Unit:',
+      'solutions.parameters.tds.description': 'Total dissolved solids. High levels affect taste and health.',
+      'solutions.parameters.chlorine.optimal': 'Safe Range:',
+      'solutions.parameters.chlorine.unit': 'Unit:',
+      'solutions.parameters.chlorine.description': 'Disinfectant level. Too low allows bacteria; too high is harmful.',
+      'solutions.parameters.fluoride.optimal': 'Optimal:',
+      'solutions.parameters.fluoride.unit': 'Unit:',
+      'solutions.parameters.fluoride.description': 'Prevents tooth decay. Excess causes fluorosis.',
+      'solutions.parameters.nitrate.optimal': 'Safe Limit:',
+      'solutions.parameters.nitrate.unit': 'Unit:',
+      'solutions.parameters.nitrate.description': 'From fertilizers/sewage. High levels cause methemoglobinemia.'
+    },
+    hi: {
+      'solutions.subtitle': 'AI-संचालित निवारक समाधान',
+      'solutions.title': 'स्वास्थ्य',
+      'solutions.title2': 'समाधान',
+      'solutions.description': 'AI जोखिम विश्लेषण के आधार पर जलजनित रोगों के लिए व्यापक निवारक उपाय और समाधान',
+      'solutions.filter.all': 'सभी जोखिम स्तर',
+      'solutions.filter.high': 'उच्च जोखिम',
+      'solutions.filter.medium': 'मध्यम जोखिम',
+      'solutions.filter.low': 'कम जोखिम',
+      'solutions.assessment.title': 'जोखिम मूल्यांकन',
+      'solutions.assessment.loading': 'वर्तमान जोखिम डेटा लोड हो रहा है...',
+      'solutions.actions.title': 'त्वरित कार्य',
+      'solutions.actions.high': 'उच्च जोखिम समाधान',
+      'solutions.actions.high.desc': 'तत्काल कार्रवाई आवश्यक',
+      'solutions.actions.medium': 'मध्यम जोखिम समाधान',
+      'solutions.actions.medium.desc': 'निवारक उपाय आवश्यक',
+      'solutions.actions.low': 'कम जोखिम समाधान',
+      'solutions.actions.low.desc': 'रखरखाव और निगरानी',
+      'solutions.actions.general': 'सामान्य रोकथाम',
+      'solutions.actions.general.desc': 'सभी के लिए सर्वोत्तम अभ्यास',
+      'solutions.parameters.title': 'जल गुणवत्ता मापदंड गाइड',
+      'solutions.parameters.description': 'मुख्य जल गुणवत्ता संकेतकों और उनकी सुरक्षित सीमाओं को समझना',
+      'solutions.parameters.ph.optimal': 'इष्टतम सीमा:',
+      'solutions.parameters.ph.unit': 'इकाई:',
+      'solutions.parameters.ph.description': 'अम्लता/क्षारीयता मापता है। सीमा से बाहर स्वास्थ्य समस्याएं पैदा कर सकता है।',
+      'solutions.parameters.turbidity.optimal': 'सुरक्षित सीमा:',
+      'solutions.parameters.turbidity.unit': 'इकाई:',
+      'solutions.parameters.turbidity.description': 'जल स्पष्टता मापता है। उच्च मैलापन संदूषण का संकेत देता है।',
+      'solutions.parameters.tds.optimal': 'स्वीकार्य:',
+      'solutions.parameters.tds.unit': 'इकाई:',
+      'solutions.parameters.tds.description': 'कुल घुलित ठोस। उच्च स्तर स्वाद और स्वास्थ्य को प्रभावित करते हैं।',
+      'solutions.parameters.chlorine.optimal': 'सुरक्षित सीमा:',
+      'solutions.parameters.chlorine.unit': 'इकाई:',
+      'solutions.parameters.chlorine.description': 'कीटाणुनाशक स्तर। बहुत कम बैक्टीरिया की अनुमति देता है; बहुत अधिक हानिकारक है।',
+      'solutions.parameters.fluoride.optimal': 'इष्टतम:',
+      'solutions.parameters.fluoride.unit': 'इकाई:',
+      'solutions.parameters.fluoride.description': 'दांतों की सड़न रोकता है। अधिकता से फ्लोरोसिस होता है।',
+      'solutions.parameters.nitrate.optimal': 'सुरक्षित सीमा:',
+      'solutions.parameters.nitrate.unit': 'इकाई:',
+      'solutions.parameters.nitrate.description': 'उर्वरक/सीवेज से। उच्च स्तर मेथेमोग्लोबिनेमिया का कारण बनता है।'
+    },
+    ta: {
+      'solutions.subtitle': 'AI-இயக்க தடுப்பு தீர்வுகள்',
+      'solutions.title': 'சுகாதார',
+      'solutions.title2': 'தீர்வுகள்',
+      'solutions.description': 'AI ஆபத்து பகுப்பாய்வின் அடிப்படையில் நீர்-பரவும் நோய்களுக்கான விரிவான தடுப்பு நடவடிக்கைகள் மற்றும் தீர்வுகள்',
+      'solutions.filter.all': 'அனைத்து ஆபத்து நிலைகள்',
+      'solutions.filter.high': 'உயர் ஆபத்து',
+      'solutions.filter.medium': 'நடுத்தர ஆபத்து',
+      'solutions.filter.low': 'குறைந்த ஆபத்து',
+      'solutions.assessment.title': 'ஆபத்து மதிப்பீடு',
+      'solutions.assessment.loading': 'தற்போதைய ஆபத்து தரவு ஏற்றப்படுகிறது...',
+      'solutions.actions.title': 'விரைவு செயல்கள்',
+      'solutions.actions.high': 'உயர் ஆபத்து தீர்வுகள்',
+      'solutions.actions.high.desc': 'உடனடி நடவடிக்கை தேவை',
+      'solutions.actions.medium': 'நடுத்தர ஆபத்து தீர்வுகள்',
+      'solutions.actions.medium.desc': 'தடுப்பு நடவடிக்கைகள் தேவை',
+      'solutions.actions.low': 'குறைந்த ஆபத்து தீர்வுகள்',
+      'solutions.actions.low.desc': 'பராமரிப்பு மற்றும் கண்காணிப்பு',
+      'solutions.actions.general': 'பொது தடுப்பு',
+      'solutions.actions.general.desc': 'அனைவருக்கும் சிறந்த நடைமுறைகள்',
+      'solutions.parameters.title': 'நீர் தரம் அளவுருக்கள் வழிகாட்டி',
+      'solutions.parameters.description': 'முக்கிய நீர் தரம் குறிகாட்டிகள் மற்றும் அவற்றின் பாதுகாப்பான வரம்புகளை புரிந்துகொள்ளுதல்',
+      'solutions.parameters.ph.optimal': 'உகந்த வரம்பு:',
+      'solutions.parameters.ph.unit': 'அலகு:',
+      'solutions.parameters.ph.description': 'அமிலத்தன்மை/காரத்தன்மையை அளவிடுகிறது. வரம்புக்கு வெளியே உடல்நல பிரச்சினைகளை ஏற்படுத்தலாம்.',
+      'solutions.parameters.turbidity.optimal': 'பாதுகாப்பான வரம்பு:',
+      'solutions.parameters.turbidity.unit': 'அலகு:',
+      'solutions.parameters.turbidity.description': 'நீர் தெளிவை அளவிடுகிறது. உயர் மங்கலானது மாசுபாட்டை குறிக்கிறது.',
+      'solutions.parameters.tds.optimal': 'ஏற்றுக்கொள்ளக்கூடிய:',
+      'solutions.parameters.tds.unit': 'அலகு:',
+      'solutions.parameters.tds.description': 'மொத்த கரைந்த திடப்பொருட்கள். உயர் நிலைகள் சுவை மற்றும் உடல்நலத்தை பாதிக்கின்றன.',
+      'solutions.parameters.chlorine.optimal': 'பாதுகாப்பான வரம்பு:',
+      'solutions.parameters.chlorine.unit': 'அலகு:',
+      'solutions.parameters.chlorine.description': 'கிருமிநாசினி நிலை. மிகக் குறைவாக பாக்டீரியாவை அனுமதிக்கிறது; மிக அதிகமாக தீங்கு விளைவிக்கிறது.',
+      'solutions.parameters.fluoride.optimal': 'உகந்த:',
+      'solutions.parameters.fluoride.unit': 'அலகு:',
+      'solutions.parameters.fluoride.description': 'பல் சிதைவை தடுக்கிறது. அதிகப்படியானது புளோரோசிஸை ஏற்படுத்துகிறது.',
+      'solutions.parameters.nitrate.optimal': 'பாதுகாப்பான வரம்பு:',
+      'solutions.parameters.nitrate.unit': 'அலகு:',
+      'solutions.parameters.nitrate.description': 'உரங்கள்/கழிவுநீரிலிருந்து. உயர் நிலைகள் மெத்தெமோகுளோபினேமியாவை ஏற்படுத்துகின்றன.'
+    }
+  };
+
+  // Current language
+  let currentLanguage = 'en';
+
+  // Initialize language
+  function initLanguage() {
+    const savedLang = localStorage.getItem('healthcore_language') || 'en';
+    setLanguage(savedLang);
+  }
+
+  // Set language
+  function setLanguage(lang) {
+    currentLanguage = lang;
+    localStorage.setItem('healthcore_language', lang);
+    const selector = document.getElementById('languageSelector');
+    if (selector) {
+      selector.value = lang;
+    }
+    
+    // Update all elements with data-i18n attributes
+    document.querySelectorAll('[data-i18n]').forEach(element => {
+      const key = element.getAttribute('data-i18n');
+      if (i18nData[lang] && i18nData[lang][key]) {
+        element.textContent = i18nData[lang][key];
+      } else if (i18nData['en'] && i18nData['en'][key]) {
+        // Fallback to English if translation not found
+        element.textContent = i18nData['en'][key];
+      }
+    });
+    
+    // Update any dynamic content that was already loaded
+    if (typeof showPreventiveMeasures === 'function') {
+      // Re-trigger the current preventive measures display with new language
+      const currentRiskLevel = window.currentRiskLevel || 'general';
+      showPreventiveMeasures(currentRiskLevel);
+    }
+  }
+
+  // Load risk assessment data
+  async function loadRiskAssessment() {
+    try {
+      const response = await fetch('/api/reports?limit=50');
+      const data = await response.json();
+      const reports = data.items || [];
+      
+      const riskAssessment = document.getElementById('riskAssessment');
+      
+      if (reports.length === 0) {
+        riskAssessment.innerHTML = '<div class="text-center text-muted-foreground">No data available</div>';
+        return;
+      }
+
+      // Calculate risk distribution
+      const riskCounts = { 'High Risk': 0, 'Medium Risk': 0, 'Low Risk': 0, 'No Risk': 0 };
+      reports.forEach(r => {
+        const risk = r.ai_prediction || computeRisk(r.cases, r.turbidity);
+        if (riskCounts.hasOwnProperty(risk)) {
+          riskCounts[risk]++;
+        } else {
+          if (risk === 'High') riskCounts['High Risk']++;
+          else if (risk === 'Medium') riskCounts['Medium Risk']++;
+          else if (risk === 'Low') riskCounts['Low Risk']++;
+        }
+      });
+
+      const total = reports.length;
+      riskAssessment.innerHTML = `
+        <div class="space-y-3">
+          <div class="flex justify-between items-center">
+            <span class="text-sm font-medium">High Risk</span>
+            <span class="text-sm font-bold text-red-600">${riskCounts['High Risk']}</span>
+          </div>
+          <div class="w-full bg-gray-200 rounded-full h-2">
+            <div class="bg-red-500 h-2 rounded-full" style="width: ${(riskCounts['High Risk']/total)*100}%"></div>
+          </div>
+          
+          <div class="flex justify-between items-center">
+            <span class="text-sm font-medium">Medium Risk</span>
+            <span class="text-sm font-bold text-yellow-600">${riskCounts['Medium Risk']}</span>
+          </div>
+          <div class="w-full bg-gray-200 rounded-full h-2">
+            <div class="bg-yellow-500 h-2 rounded-full" style="width: ${(riskCounts['Medium Risk']/total)*100}%"></div>
+          </div>
+          
+          <div class="flex justify-between items-center">
+            <span class="text-sm font-medium">Low Risk</span>
+            <span class="text-sm font-bold text-green-600">${riskCounts['Low Risk']}</span>
+          </div>
+          <div class="w-full bg-gray-200 rounded-full h-2">
+            <div class="bg-green-500 h-2 rounded-full" style="width: ${(riskCounts['Low Risk']/total)*100}%"></div>
+          </div>
+          
+          <div class="pt-2 border-t">
+            <div class="text-center text-sm text-muted-foreground">
+              Total Reports: <span class="font-semibold">${total}</span>
+            </div>
+          </div>
+        </div>
+      `;
+    } catch (error) {
+      console.error('Error loading risk assessment:', error);
+      document.getElementById('riskAssessment').innerHTML = '<div class="text-center text-red-500">Error loading data</div>';
+    }
+  }
+
+  // Compute risk level
+  function computeRisk(cases, turbidity) {
+    if ((cases && cases > 10) || (turbidity && turbidity > 20)) return 'High Risk';
+    if ((cases && cases > 5) || (turbidity && turbidity > 10)) return 'Medium Risk';
+    return 'Low Risk';
+  }
+
+  // Show preventive measures based on risk level
+  function showPreventiveMeasures(riskLevel) {
+    window.currentRiskLevel = riskLevel; // Track current risk level for language switching
+    const container = document.getElementById('preventiveMeasures');
+    
+    const measures = {
+      high: {
+        title: 'High Risk - Immediate Action Required',
+        titleHi: 'उच्च जोखिम - तत्काल कार्रवाई आवश्यक',
+        titleTa: 'உயர் ஆபத்து - உடனடி நடவடிக்கை தேவை',
+        color: 'red',
+        icon: 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z',
+        actions: [
+          'Stop using contaminated water immediately',
+          'Boil water for at least 10 minutes before consumption',
+          'Use water purification tablets or filters',
+          'Contact local health authorities immediately',
+          'Avoid direct contact with contaminated water sources',
+          'Implement emergency water treatment protocols'
+        ],
+        actionsHi: [
+          'दूषित पानी का उपयोग तुरंत बंद करें',
+          'उपभोग से पहले कम से कम 10 मिनट तक पानी उबालें',
+          'पानी शुद्धिकरण गोलियां या फिल्टर का उपयोग करें',
+          'स्थानीय स्वास्थ्य अधिकारियों से तुरंत संपर्क करें',
+          'दूषित जल स्रोतों के सीधे संपर्क से बचें',
+          'आपातकालीन जल उपचार प्रोटोकॉल लागू करें'
+        ],
+        actionsTa: [
+          'மாசுபட்ட நீரை உடனடியாக பயன்படுத்துவதை நிறுத்துங்கள்',
+          'நுகர்வுக்கு முன் குறைந்தது 10 நிமிடங்கள் நீரை கொதிக்கவைக்கவும்',
+          'நீர் சுத்திகரிப்பு மாத்திரைகள் அல்லது வடிகட்டிகள் பயன்படுத்தவும்',
+          'உள்ளூர் சுகாதார அதிகாரிகளை உடனடியாக தொடர்பு கொள்ளவும்',
+          'மாசுபட்ட நீர் ஆதாரங்களுடன் நேரடி தொடர்பை தவிர்க்கவும்',
+          'அவசரகால நீர் சிகிச்சை நெறிமுறைகளை செயல்படுத்தவும்'
+        ]
+      },
+      medium: {
+        title: 'Medium Risk - Preventive Measures Needed',
+        titleHi: 'मध्यम जोखिम - निवारक उपाय आवश्यक',
+        titleTa: 'நடுத்தர ஆபத்து - தடுப்பு நடவடிக்கைகள் தேवை',
+        color: 'yellow',
+        icon: 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z',
+        actions: [
+          'Increase water testing frequency',
+          'Implement additional filtration systems',
+          'Monitor water quality parameters daily',
+          'Educate community about water safety',
+          'Prepare emergency response plans',
+          'Consider alternative water sources'
+        ],
+        actionsHi: [
+          'पानी की जांच की आवृत्ति बढ़ाएं',
+          'अतिरिक्त निस्पंदन प्रणाली लागू करें',
+          'दैनिक जल गुणवत्ता मापदंडों की निगरानी करें',
+          'समुदाय को जल सुरक्षा के बारे में शिक्षित करें',
+          'आपातकालीन प्रतिक्रिया योजनाएं तैयार करें',
+          'वैकल्पिक जल स्रोतों पर विचार करें'
+        ],
+        actionsTa: [
+          'நீர் சோதனை அதிர்வெண்ணை அதிகரிக்கவும்',
+          'கூடுதல் வடிகட்டுதல் அமைப்புகளை செயல்படுத்தவும்',
+          'தினசரி நீர் தர அளவுருக்களை கண்காணிக்கவும்',
+          'சமூகத்தை நீர் பாதுகாப்பு பற்றி கல்வி அளிக்கவும்',
+          'அவசரகால பதிலளிப்பு திட்டங்களை தயாரிக்கவும்',
+          'மாற்று நீர் ஆதாரங்களை கருத்தில் கொள்ளவும்'
+        ]
+      },
+      low: {
+        title: 'Low Risk - Maintenance and Monitoring',
+        titleHi: 'कम जोखिम - रखरखाव और निगरानी',
+        titleTa: 'குறைந்த ஆபத்து - பராமரிப்பு மற்றும் கண்காணிப்பு',
+        color: 'green',
+        icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z',
+        actions: [
+          'Continue regular water quality monitoring',
+          'Maintain existing water treatment systems',
+          'Conduct monthly water quality assessments',
+          'Keep emergency supplies ready',
+          'Train community members on water safety',
+          'Document all water quality data'
+        ],
+        actionsHi: [
+          'नियमित जल गुणवत्ता निगरानी जारी रखें',
+          'मौजूदा जल उपचार प्रणालियों का रखरखाव करें',
+          'मासिक जल गुणवत्ता मूल्यांकन करें',
+          'आपातकालीन आपूर्ति तैयार रखें',
+          'समुदाय के सदस्यों को जल सुरक्षा पर प्रशिक्षित करें',
+          'सभी जल गुणवत्ता डेटा का दस्तावेजीकरण करें'
+        ],
+        actionsTa: [
+          'வழக்கமான நீர் தர கண்காணிப்பை தொடரவும்',
+          'தற்போதைய நீர் சிகிச்சை அமைப்புகளை பராமரிக்கவும்',
+          'மாதாந்திர நீர் தர மதிப்பீடுகளை நடத்தவும்',
+          'அவசரகால வழங்கல்களை தயாராக வைத்திருக்கவும்',
+          'சமூக உறுப்பினர்களை நீர் பாதுகாப்பு குறித்து பயிற்சி அளிக்கவும்',
+          'அனைத்து நீர் தர தரவையும் ஆவணப்படுத்தவும்'
+        ]
+      },
+      general: {
+        title: 'General Prevention - Best Practices',
+        titleHi: 'सामान्य रोकथाम - सर्वोत्तम अभ्यास',
+        titleTa: 'பொது தடுப்பு - சிறந்த நடைமுறைகள்',
+        color: 'blue',
+        icon: 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z',
+        actions: [
+          'Always wash hands before handling water',
+          'Store water in clean, covered containers',
+          'Use separate containers for drinking and cooking',
+          'Regularly clean water storage areas',
+          'Avoid cross-contamination between water sources',
+          'Follow proper hygiene practices around water'
+        ],
+        actionsHi: [
+          'पानी को संभालने से पहले हमेशा हाथ धोएं',
+          'पानी को साफ, ढके हुए कंटेनरों में स्टोर करें',
+          'पीने और खाना पकाने के लिए अलग कंटेनरों का उपयोग करें',
+          'नियमित रूप से जल भंडारण क्षेत्रों को साफ करें',
+          'जल स्रोतों के बीच क्रॉस-संदूषण से बचें',
+          'पानी के आसपास उचित स्वच्छता अभ्यासों का पालन करें'
+        ],
+        actionsTa: [
+          'நீரை கையாளுவதற்கு முன் எப்போதும் கைகளை கழுவவும்',
+          'நீரை சுத்தமான, மூடப்பட்ட கொள்கலன்களில் சேமிக்கவும்',
+          'குடிப்பதற்கும் சமைப்பதற்கும் தனி கொள்கலன்களை பயன்படுத்தவும்',
+          'வழக்கமாக நீர் சேமிப்பு பகுதிகளை சுத்தம் செய்யவும்',
+          'நீர் ஆதாரங்களுக்கு இடையே குறுக்கு மாசுபாட்டை தவிர்க்கவும்',
+          'நீரைச் சுற்றி சரியான சுகாதார நடைமுறைகளை பின்பற்றவும்'
+        ]
+      }
+    };
+
+    const measure = measures[riskLevel];
+    if (!measure) return;
+
+    const title = currentLanguage === 'hi' ? measure.titleHi : 
+                  currentLanguage === 'ta' ? measure.titleTa : measure.title;
+    const actions = currentLanguage === 'hi' ? measure.actionsHi : 
+                   currentLanguage === 'ta' ? measure.actionsTa : measure.actions;
+
+    container.innerHTML = `
+      <div class="bg-card rounded-2xl shadow-xl border p-8 animate-slide-up">
+        <div class="flex items-center space-x-4 mb-8">
+          <div class="h-12 w-12 rounded-xl bg-${measure.color}-500/10 flex items-center justify-center">
+            <svg class="w-6 h-6 text-${measure.color}-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${measure.icon}"></path>
+            </svg>
+          </div>
+          <div>
+            <h3 class="text-2xl font-bold text-foreground">${title}</h3>
+            <p class="text-muted-foreground">Comprehensive preventive measures and solutions</p>
+          </div>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          ${actions.map((action, index) => `
+            <div class="flex items-start space-x-3 p-4 rounded-xl border border-${measure.color}-200 bg-${measure.color}-50">
+              <div class="h-6 w-6 rounded-full bg-${measure.color}-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                <span class="text-xs font-bold text-${measure.color}-600">${index + 1}</span>
+              </div>
+              <p class="text-sm text-${measure.color}-800">${action}</p>
+            </div>
+          `).join('')}
+        </div>
+        
+        <div class="mt-8 p-6 rounded-xl bg-gradient-to-r from-${measure.color}-50 to-${measure.color}-100 border border-${measure.color}-200">
+          <h4 class="font-semibold text-${measure.color}-800 mb-3">Additional Resources</h4>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-${measure.color}-700">
+            <div>• Contact local health department</div>
+            <div>• Download water safety guidelines</div>
+            <div>• Join community health programs</div>
+            <div>• Report water quality issues</div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  // Event listeners
+  document.getElementById('languageSelector').addEventListener('change', (e) => {
+    setLanguage(e.target.value);
+  });
+
+  // Initialize
+  document.addEventListener('DOMContentLoaded', () => {
+    initLanguage();
+    loadRiskAssessment();
+  });
+</script>
+{% endblock %}

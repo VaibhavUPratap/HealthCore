@@ -26,6 +26,10 @@ def create_app():
     def alerts_page():
         return render_template("alerts.html")
     
+    @app.route("/solutions")
+    def solutions_page():
+        return render_template("solutions.html")
+    
     @app.route("/text-comparison")
     def text_comparison():
         return render_template("text-comparison.html")
